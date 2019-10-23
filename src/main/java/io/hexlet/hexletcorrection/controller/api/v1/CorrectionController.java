@@ -1,7 +1,7 @@
 package io.hexlet.hexletcorrection.controller.api.v1;
 
 import io.hexlet.hexletcorrection.controller.exception.CorrectionNotFoundException;
-import io.hexlet.hexletcorrection.dto.CorrectionDto;
+import io.hexlet.hexletcorrection.dto.CorrectionGetDto;
 import io.hexlet.hexletcorrection.dto.CorrectionPostDto;
 import io.hexlet.hexletcorrection.dto.mapper.CorrectionMapper;
 import io.hexlet.hexletcorrection.service.CorrectionService;
@@ -34,7 +34,7 @@ public class CorrectionController {
     private final CorrectionMapper correctionMapper;
 
     @GetMapping
-    public List<CorrectionDto> getCorrections(@RequestParam(required = false) String url) {
+    public List<CorrectionGetDto> getCorrections(@RequestParam(required = false) String url) {
         if (url == null) {
             return correctionService.findAll()
                     .stream()
@@ -49,7 +49,7 @@ public class CorrectionController {
     }
 
     @GetMapping(path = "/{id}")
-    public CorrectionDto getCorrectionById(@PathVariable("id") Long id) {
+    public CorrectionGetDto getCorrectionById(@PathVariable("id") Long id) {
         return correctionMapper.toCorrectionDto(
                 correctionService
                         .findById(id)
@@ -60,7 +60,7 @@ public class CorrectionController {
     @CrossOrigin
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CorrectionDto createCorrection(@Valid @RequestBody CorrectionPostDto correction) {
+    public CorrectionGetDto createCorrection(@Valid @RequestBody CorrectionPostDto correction) {
         return correctionMapper.toCorrectionDto(
                 correctionService.create(
                         correctionMapper.postDtoToCorrection(correction)

@@ -9,8 +9,8 @@
     <div class="container">
         <h4 th:text="#{account.header.edit}"></h4>
         <h4 th:if="${error}" th:text="${error}"></h4>
-        <div th:if="${accountDto}">
-            <form th:method="put" th:action="@{/accounts}" th:object="${accountDto}">
+        <div th:if="${accountGetDto}">
+            <form th:method="put" th:action="@{/accounts}" th:object="${accountGetDto}">
                 <input type="hidden" name="_method" value="put"/>
                 <input type="hidden" th:field="*{id}"/>
                 <div class="form-row">

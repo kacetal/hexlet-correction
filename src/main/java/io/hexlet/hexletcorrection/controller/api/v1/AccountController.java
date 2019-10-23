@@ -1,7 +1,7 @@
 package io.hexlet.hexletcorrection.controller.api.v1;
 
 import io.hexlet.hexletcorrection.controller.exception.AccountNotFoundException;
-import io.hexlet.hexletcorrection.dto.AccountDto;
+import io.hexlet.hexletcorrection.dto.AccountGetDto;
 import io.hexlet.hexletcorrection.dto.AccountPostDto;
 import io.hexlet.hexletcorrection.dto.mapper.AccountMapper;
 import io.hexlet.hexletcorrection.service.AccountService;
@@ -33,34 +33,29 @@ public class AccountController {
     private final AccountMapper accountMapper;
 
     @GetMapping("/{id}")
-    public AccountDto getAccountById(@PathVariable("id") Long id) {
-        return accountMapper.toAccountDto(
-                accountService
-                        .findById(id)
-                        .orElseThrow(() -> new AccountNotFoundException(id))
-        );
+    public AccountGetDto getAccountById(@PathVariable("id") Long id) {
+        return accountMapper.toAccountGetDto(
+                accountService.findById(id).orElseThrow(() -> new AccountNotFoundException(id)));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountDto createAccount(@Valid @RequestBody AccountPostDto account) {
-        return accountMapper.toAccountDto(
-                accountService.create(
-                        accountMapper.postDtoToAccount(account)
-                )
+    public AccountGetDto createAccount(@Valid @RequestBody AccountPostDto account) {
+        return accountMapper.toAccountGetDto(
+                accountService.create(accountMapper.postDtoToAccount(account)             )
         );
     }
 
     @GetMapping
-    public List<AccountDto> getAccounts(@RequestParam(required = false) String name) {
+    public List<AccountGetDto> getAccounts(@RequestParam(required = false) String name) {
         if (name == null) {
             return accountService.findAll()
                     .stream()
-                    .map(accountMapper::toAccountDto)
+                    .map(accountMapper::toAccountGetDto)
                     .collect(Collectors.toList());
         }
         return accountService.findByName(name).stream()
-                .map(accountMapper::toAccountDto)
+                .map(accountMapper::toAccountGetDto)
                 .collect(Collectors.toList());
     }
 

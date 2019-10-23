@@ -9,7 +9,7 @@
     <div class="container">
         <h4 th:text="#{account.header.info}"></h4>
         <h4 th:if="${error}" th:text="${error}"></h4>
-        <div th:if="${accountDto}">
+        <div th:if="${accountGetDto}">
             <div class="table-responsive-md">
                 <table class="table table-striped">
                     <thead class="thead-light">
@@ -22,16 +22,16 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td th:text="${accountDto.id}"></td>
-                        <td th:text="${accountDto.name}"></td>
-                        <td th:text="${accountDto.email}"></td>
-                        <td th:text="${accountDto.corrections.size()}"></td>
+                        <td th:text="${accountGetDto.id}"></td>
+                        <td th:text="${accountGetDto.name}"></td>
+                        <td th:text="${accountGetDto.email}"></td>
+                        <td th:text="${accountGetDto.corrections.size()}"></td>
                         <td>
                             <a class="btn btn-outline-secondary"
-                               th:href="${'/accounts/edit/' + accountDto.id}" th:text="#{action.edit}"></a>
+                               th:href="${'/accounts/edit/' + accountGetDto.id}" th:text="#{action.edit}"></a>
                         </td>
                         <td>
-                            <form action="#" th:action="@{'/accounts/{id}'(id=${accountDto.id})}" th:method="delete">
+                            <form action="#" th:action="@{'/accounts/{id}'(id=${accountGetDto.id})}" th:method="delete">
                                 <input type="hidden" name="_method" value="delete"/>
                                 <button class="btn btn-outline-danger" type="submit" id="deleteAccount"
                                         th:text="#{action.delete}"></button>
@@ -41,7 +41,7 @@
                     </tbody>
                 </table>
             </div>
-            <div th:unless="${#lists.isEmpty(accountDto.corrections)}" class="table-responsive-md">
+            <div th:unless="${#lists.isEmpty(accountGetDto.corrections)}" class="table-responsive-md">
                 <table class="table table-striped">
                     <thead class="thead-dark">
                     <tr>
@@ -52,21 +52,21 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="correctionDto : ${accountDto.corrections}">
-                        <td th:text="${correctionDto.id}"></td>
-                        <td th:text="${correctionDto.pageURL}"></td>
-                        <td th:text="${correctionDto.comment}"></td>
-                        <td th:text="${correctionDto.highlightText}"></td>
+                    <tr th:each="correctionGetDto : ${accountGetDto.corrections}">
+                        <td th:text="${correctionGetDto.id}"></td>
+                        <td th:text="${correctionGetDto.pageURL}"></td>
+                        <td th:text="${correctionGetDto.comment}"></td>
+                        <td th:text="${correctionGetDto.highlightText}"></td>
                         <td>
                             <a class="btn btn-outline-info"
-                               th:href="${'/corrections/' + correctionDto.id}" th:text="#{action.view}"></a>
+                               th:href="${'/corrections/' + correctionGetDto.id}" th:text="#{action.view}"></a>
                         </td>
                         <td>
                             <a class="btn btn-outline-secondary"
-                               th:href="${'/corrections/update/' + correctionDto.id}" th:text="#{action.edit}"></a>
+                               th:href="${'/corrections/update/' + correctionGetDto.id}" th:text="#{action.edit}"></a>
                         </td>
                         <td>
-                            <form action="#" th:action="@{'/corrections/{id}'(id=${accountDto.id})}" th:method="delete">
+                            <form action="#" th:action="@{'/corrections/{id}'(id=${accountGetDto.id})}" th:method="delete">
                                 <input type="hidden" name="_method" value="delete"/>
                                 <button class="btn btn-outline-danger" type="submit" id="deleteCorrection"
                                         th:text="#{action.delete}"></button>

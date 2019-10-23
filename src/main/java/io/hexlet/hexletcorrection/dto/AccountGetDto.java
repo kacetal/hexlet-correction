@@ -23,8 +23,9 @@ import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_EMP
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AccountDto {
+public class AccountGetDto implements Comparable<AccountGetDto> {
 
+    @NotBlank(message = "Id " + NOT_EMPTY)
     private Long id;
 
     @NotBlank(message = "Name " + NOT_EMPTY)
@@ -36,5 +37,10 @@ public class AccountDto {
     private String email;
 
     @JsonIgnoreProperties("account")
-    private Set<CorrectionDto> corrections;
+    private Set<CorrectionGetDto> corrections;
+
+    @Override
+    public int compareTo(AccountGetDto accountGetDto) {
+        return this.id.compareTo(accountGetDto.getId());
+    }
 }

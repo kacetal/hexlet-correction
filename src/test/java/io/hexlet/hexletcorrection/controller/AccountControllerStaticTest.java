@@ -2,7 +2,7 @@ package io.hexlet.hexletcorrection.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hexlet.hexletcorrection.domain.Account;
-import io.hexlet.hexletcorrection.dto.AccountDto;
+import io.hexlet.hexletcorrection.dto.AccountGetDto;
 import io.restassured.http.ContentType;
 import org.junit.After;
 import org.junit.Before;
@@ -164,8 +164,7 @@ public class AccountControllerStaticTest extends AbstractControllerTest {
         final String newEmail = "new" + testAccountOne.getEmail();
         final Long accountId = testAccountOne.getId();
 
-        AccountDto accountDto = AccountDto.builder()
-            .id(accountId)
+        AccountGetDto accountGetDto = AccountGetDto.builder()
             .name(newName)
             .email(newEmail)
             .corrections(Collections.emptySet())
@@ -174,7 +173,7 @@ public class AccountControllerStaticTest extends AbstractControllerTest {
         mvc.perform(
             put(ACCOUNTS_PATH)
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(accountDto))
+                .content(objectMapper.writeValueAsString(accountGetDto))
                 .with(csrf())
         ).andExpect(status().isFound());
 

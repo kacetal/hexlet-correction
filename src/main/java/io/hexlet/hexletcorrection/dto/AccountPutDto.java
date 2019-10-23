@@ -19,7 +19,10 @@ import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_EMP
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccountPostDto implements Comparable<AccountPostDto> {
+public class AccountPutDto implements Comparable<AccountPutDto> {
+
+    @NotBlank(message = "Id " + NOT_EMPTY)
+    private Long id;
 
     @NotBlank(message = "Name " + NOT_EMPTY)
     @Size(message = "Name not be more than " + MAX_ACCOUNT_NAME + " characters", max = MAX_ACCOUNT_NAME)
@@ -32,11 +35,8 @@ public class AccountPostDto implements Comparable<AccountPostDto> {
     @NotBlank(message = "Password " + NOT_EMPTY)
     private String password;
 
-    @NotBlank(message = "Password confirm " + NOT_EMPTY)
-    private String passwordConfirm;
-
     @Override
-    public int compareTo(AccountPostDto accountPostDto) {
-        return this.email.compareTo(accountPostDto.getEmail());
+    public int compareTo(AccountPutDto accountPutDto) {
+        return this.id.compareTo(accountPutDto.getId());
     }
 }

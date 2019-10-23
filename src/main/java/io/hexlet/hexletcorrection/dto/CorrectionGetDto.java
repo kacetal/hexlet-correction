@@ -1,5 +1,7 @@
 package io.hexlet.hexletcorrection.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +22,11 @@ import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_NUL
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CorrectionPostDto {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CorrectionGetDto {
+
+    @NotBlank(message = "Id " + NOT_EMPTY)
+    private Long id;
 
     @NotEmpty(message = "Comment " + NOT_EMPTY)
     @Size(message = "Comment not be more than " + MAX_COMMENT_LENGTH + " characters", max = MAX_COMMENT_LENGTH)
@@ -34,6 +40,7 @@ public class CorrectionPostDto {
     private String afterHighlight;
 
     @NotNull(message = "Account " + NOT_NULL)
+    @JsonIgnoreProperties("corrections")
     private AccountGetDto account;
 
     @NotBlank(message = "URL " + NOT_EMPTY)

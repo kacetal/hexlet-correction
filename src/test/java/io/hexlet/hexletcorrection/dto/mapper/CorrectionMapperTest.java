@@ -2,8 +2,8 @@ package io.hexlet.hexletcorrection.dto.mapper;
 
 import io.hexlet.hexletcorrection.domain.Account;
 import io.hexlet.hexletcorrection.domain.Correction;
-import io.hexlet.hexletcorrection.dto.AccountDto;
-import io.hexlet.hexletcorrection.dto.CorrectionDto;
+import io.hexlet.hexletcorrection.dto.AccountGetDto;
+import io.hexlet.hexletcorrection.dto.CorrectionGetDto;
 import io.hexlet.hexletcorrection.dto.CorrectionPostDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,15 +25,14 @@ public class CorrectionMapperTest {
 
     @Test
     public void correctionToCorrectionDtoTest() {
-        final CorrectionDto expectedCorrectionDto = getCorrectionDto();
-        final CorrectionDto actualCorrectionDto = correctionMapper.toCorrectionDto(getCorrection());
+        final CorrectionGetDto expectedCorrectionGetDto = getCorrectionDto();
+        final CorrectionGetDto actualCorrectionGetDto = correctionMapper.toCorrectionDto(getCorrection());
 
-        assertEquals(expectedCorrectionDto.getId(), actualCorrectionDto.getId());
-        assertEquals(expectedCorrectionDto.getPageURL(), actualCorrectionDto.getPageURL());
-        assertEquals(expectedCorrectionDto.getHighlightText(), actualCorrectionDto.getHighlightText());
-        assertEquals(expectedCorrectionDto.getComment(), actualCorrectionDto.getComment());
-        assertEquals(expectedCorrectionDto.getAccount().getId(), actualCorrectionDto.getAccount().getId());
-        assertNull(actualCorrectionDto.getAccount().getCorrections());
+        assertEquals(expectedCorrectionGetDto.getId(), actualCorrectionGetDto.getId());
+        assertEquals(expectedCorrectionGetDto.getPageURL(), actualCorrectionGetDto.getPageURL());
+        assertEquals(expectedCorrectionGetDto.getHighlightText(), actualCorrectionGetDto.getHighlightText());
+        assertEquals(expectedCorrectionGetDto.getComment(), actualCorrectionGetDto.getComment());
+        assertNull(actualCorrectionGetDto.getAccount().getCorrections());
     }
 
     @Test
@@ -111,20 +110,19 @@ public class CorrectionMapperTest {
                 .build();
     }
 
-    private CorrectionDto getCorrectionDto() {
-        return CorrectionDto.builder()
+    private CorrectionGetDto getCorrectionDto() {
+        return CorrectionGetDto.builder()
                 .id(1L)
                 .pageURL("hexlet.io")
                 .highlightText("some mistake")
                 .beforeHighlight("before highlight")
                 .afterHighlight("after highlight")
                 .comment("some mistake comment")
-                .account(AccountDto.builder()
-                        .id(5L)
+                .account(AccountGetDto.builder()
                         .name("Anatoly")
                         .email("anatoly@hexlet.io")
                         .corrections(
-                                Set.of(CorrectionDto.builder().id(1L).build(),CorrectionDto.builder().id(2L).build()))
+                                Set.of(CorrectionGetDto.builder().id(1L).build(), CorrectionGetDto.builder().id(2L).build()))
                         .build())
                 .build();
     }
@@ -136,12 +134,11 @@ public class CorrectionMapperTest {
                 .beforeHighlight("before highlight")
                 .afterHighlight("after highlight")
                 .comment("some mistake comment")
-                .account(AccountDto.builder()
-                        .id(5L)
+                .account(AccountGetDto.builder()
                         .name("Anatoly")
                         .email("anatoly@hexlet.io")
                         .corrections(
-                                Set.of(CorrectionDto.builder().id(1L).build(),CorrectionDto.builder().id(2L).build()))
+                                Set.of(CorrectionGetDto.builder().id(1L).build(), CorrectionGetDto.builder().id(2L).build()))
                         .build())
                 .build();
     }
