@@ -1,6 +1,7 @@
 package io.hexlet.hexletcorrection.controller.api.v1;
 
 import io.hexlet.hexletcorrection.controller.exception.AccountNotFoundException;
+import io.hexlet.hexletcorrection.domain.Account;
 import io.hexlet.hexletcorrection.dto.AccountGetDto;
 import io.hexlet.hexletcorrection.dto.AccountPostDto;
 import io.hexlet.hexletcorrection.dto.mapper.AccountMapper;
@@ -35,14 +36,15 @@ public class AccountController {
     @GetMapping("/{id}")
     public AccountGetDto getAccountById(@PathVariable("id") Long id) {
         return accountMapper.toAccountGetDto(
-                accountService.findById(id).orElseThrow(() -> new AccountNotFoundException(id)));
+            accountService.findById(id).orElseThrow(() -> new AccountNotFoundException(id))
+        );
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AccountGetDto createAccount(@Valid @RequestBody AccountPostDto account) {
         return accountMapper.toAccountGetDto(
-                accountService.create(accountMapper.postDtoToAccount(account)             )
+            accountService.create(accountMapper.postDtoToAccount(account))
         );
     }
 
@@ -50,13 +52,13 @@ public class AccountController {
     public List<AccountGetDto> getAccounts(@RequestParam(required = false) String name) {
         if (name == null) {
             return accountService.findAll()
-                    .stream()
-                    .map(accountMapper::toAccountGetDto)
-                    .collect(Collectors.toList());
-        }
-        return accountService.findByName(name).stream()
+                .stream()
                 .map(accountMapper::toAccountGetDto)
                 .collect(Collectors.toList());
+        }
+        return accountService.findByName(name).stream()
+            .map(accountMapper::toAccountGetDto)
+            .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")

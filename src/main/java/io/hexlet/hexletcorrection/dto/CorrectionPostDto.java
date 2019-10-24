@@ -1,5 +1,6 @@
 package io.hexlet.hexletcorrection.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class CorrectionPostDto {
     private String afterHighlight;
 
     @NotNull(message = "Account " + NOT_NULL)
+    @JsonIgnoreProperties("corrections")
     private AccountGetDto account;
 
     @NotBlank(message = "URL " + NOT_EMPTY)

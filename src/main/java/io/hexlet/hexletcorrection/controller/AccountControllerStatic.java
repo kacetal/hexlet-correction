@@ -118,8 +118,8 @@ public class AccountControllerStatic {
         }
 
         Long updatedAccountId = accountService
-                .create(accountMapper.putDtoToAccount(accountPutDto))
-                .getId();
+            .create(accountMapper.putDtoToAccount(accountPutDto))
+            .getId();
 
         return REDIRECT_ACCOUNT_PATH + updatedAccountId;
     }
