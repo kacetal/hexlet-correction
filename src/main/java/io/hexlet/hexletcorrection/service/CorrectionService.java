@@ -1,19 +1,17 @@
 package io.hexlet.hexletcorrection.service;
 
+import io.hexlet.hexletcorrection.domain.Account;
 import io.hexlet.hexletcorrection.domain.Correction;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface CorrectionService {
+public interface CorrectionService extends BaseService<Correction, Long> {
 
-    Optional<Correction> findById(Long id);
+    List<Correction> findByReporter(String reporter);
 
-    List<Correction> findByURL(String url);
+    List<Correction> findByCorrecter(Account correcter);
 
-    List<Correction> findAll();
+    List<Correction> findByResolver(Account correcter);
 
-    Correction create(Correction correction);
-
-    void delete(Long id);
+    List<Correction> findByPageURL(String pageURL);
 }

@@ -1,6 +1,6 @@
 package io.hexlet.hexletcorrection.controller.validator;
 
-import io.hexlet.hexletcorrection.dto.AccountPostDto;
+import io.hexlet.hexletcorrection.dto.account.AccountPostDto;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

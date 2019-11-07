@@ -2,6 +2,10 @@ package io.hexlet.hexletcorrection.controller;
 
 public class ControllerConstants {
 
+    public final static String WARNING = "warning";
+
+    public final static String ERROR = "error";
+
     public final static String TEST_HOST = "http://localhost";
 
     public final static String REACT_APP_BUNDLE_PATH = "/dist/app-bundle.js";

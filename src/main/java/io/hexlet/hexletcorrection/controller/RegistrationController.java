@@ -2,7 +2,7 @@ package io.hexlet.hexletcorrection.controller;
 
 import io.hexlet.hexletcorrection.controller.validator.AccountPostDtoValidator;
 import io.hexlet.hexletcorrection.domain.Account;
-import io.hexlet.hexletcorrection.dto.AccountPostDto;
+import io.hexlet.hexletcorrection.dto.account.AccountPostDto;
 import io.hexlet.hexletcorrection.dto.mapper.AccountMapper;
 import io.hexlet.hexletcorrection.service.AccountService;
 import lombok.AllArgsConstructor;
@@ -60,7 +60,7 @@ public class RegistrationController {
             return "registration";
         }
 
-        accountService.create(accountMapper.postDtoToAccount(accountPostDto));
+        accountService.save(accountMapper.postDtoToAccount(accountPostDto));
 
         return "redirect:login";
     }

@@ -7,14 +7,15 @@
 <!-- Main -->
 <main class="flex-shrink-0 my-5">
     <div class="container">
-        <div class="row justify-content-md-center" th:if="${accountGetDtos.isEmpty()}">
+        <div th:if="${accountGetDtos.isEmpty()}" class="row justify-content-md-center">
             <a class="btn btn-outline-info col col-lg-2" th:href="${'/accounts/new'}"
                th:text="#{account.action.new}"></a>
         </div>
+        <h5 th:if="${error}" th:text="${error}"></h5>
         <div th:unless="${accountGetDtos.isEmpty()}">
-            <h4 th:text="${'#{account.header.quantity}' + 'accountGetDtos.size()'}"></h4>
+            <h4 th:text="#{account.header.quantity} + ${accountGetDtos.size()}"></h4>
             <div class="table-responsive-md">
-                <table class="table table-striped">
+                <table class="table table-striped table-hover">
                     <thead class="thead-light">
                     <tr>
                         <th th:text="#{field.id}"></th>
@@ -24,26 +25,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="accountGetDto : ${accountGetDtos}">
-                        <td th:text="${accountGetDto.id}"></td>
-                        <td th:text="${accountGetDto.name}"></td>
-                        <td th:text="${accountGetDto.email}"></td>
-                        <td th:text="${accountGetDto.corrections.size()}"></td>
-                        <td>
-                            <a class="btn btn-outline-info"
-                               th:href="${'/accounts/' + accountGetDto.id}" th:text="#{action.view}"></a>
-                        </td>
-                        <td>
-                            <a class="btn btn-outline-secondary"
-                               th:href="${'/accounts/edit/' + accountGetDto.id}" th:text="#{action.edit}"></a>
-                        </td>
-                        <td>
-                            <form action="#" th:action="@{'/accounts/{id}'(id=${accountGetDto.id})}" th:method="delete">
-                                <input type="hidden" name="_method" value="delete"/>
-                                <button class="btn btn-outline-danger" type="submit" id="deleteAccount"
-                                        th:text="#{action.delete}"></button>
-                            </form>
-                        </td>
+                    <tr th:each="accountGetDto : ${accountGetDtos}" th:object="${accountGetDto}"
+                        class="clickable-row" th:data-href="${'/accounts/' + accountGetDto.id}">
+                        <td th:text="*{id}"></td>
+                        <td th:text="*{name}"></td>
+                        <td th:text="*{email}"></td>
+                        <td th:text="*{corrections.size()}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -53,4 +40,11 @@
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".clickable-row").click(function () {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
 </html>

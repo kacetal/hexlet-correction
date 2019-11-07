@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.7.RELEASE</version>
+        <version>2.2.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.hexlet</groupId>
@@ -33,9 +33,10 @@
 
         <!-- Dependencies versions -->
         <java.version>12</java.version>
-        <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
+        <spring-boot.version>2.2.0.RELEASE</spring-boot.version>
 
         <rest-assured.version>4.1.0</rest-assured.version>
+        <jjschema.version>1.16</jjschema.version>
         <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
         <lombok.version>1.18.8</lombok.version>
         <h2database.version>1.4.199</h2database.version>
@@ -113,6 +114,11 @@
             <artifactId>json-schema-validator</artifactId>
             <version>${rest-assured.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.reinert</groupId>
+            <artifactId>jjschema</artifactId>
+            <version>${jjschema.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -310,7 +316,7 @@
                 <configuration>
                     <propertyFile>${project.build.outputDirectory}/liquibase-maven-plugin.properties</propertyFile>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
-                    <logging>info</logging>
+                    <logging>debug</logging>
                 </configuration>
                 <dependencies>
                     <dependency>

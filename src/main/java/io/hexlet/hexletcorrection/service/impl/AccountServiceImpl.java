@@ -1,16 +1,20 @@
 package io.hexlet.hexletcorrection.service.impl;
 
+import com.google.common.base.Strings;
 import io.hexlet.hexletcorrection.domain.Account;
 import io.hexlet.hexletcorrection.repository.AccountRepository;
 import io.hexlet.hexletcorrection.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Collections.emptyList;
+import static java.util.Optional.empty;
 
 @Slf4j
 @Service
@@ -18,21 +22,22 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    @Override
-    public Optional<Account> findById(Long id) {
-        return accountRepository.findById(id);
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<Account> findByEmail(String email) {
+        if (Strings.isNullOrEmpty(email)) {
+            return empty();
+        }
         return accountRepository.findOneByEmail(email);
     }
 
     @Override
-    public List<Account> findByName(String name) {
-        return accountRepository.findByName(name);
+    public Optional<Account> findByUsername(String username) {
+        if (Strings.isNullOrEmpty(username)) {
+            return empty();
+        }
+        return accountRepository.findByUsername(username);
     }
 
     @Override
@@ -41,23 +46,91 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account create(Account account) {
-        if (account.getId() != null) {
-            Account accountToPut = accountRepository.findById(account.getId()).orElseThrow();
-            accountToPut.setName(account.getName());
-            accountToPut.setEmail(account.getEmail());
-            return accountRepository.save(accountToPut);
+    public List<Account> findAllByIds(Iterable<Long> ids) {
+        if (ids == null) {
+            return emptyList();
         }
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        return accountRepository.save(account);
+        return accountRepository.findAllById(ids);
     }
 
     @Override
-    public void delete(Long id) {
+    public Optional<Account> findById(Long id) {
+        if (id == null) {
+            return empty();
+        }
+        return accountRepository.findById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        if (id == null) {
+            return false;
+        }
+        return accountRepository.existsById(id);
+    }
+
+    @Override
+    public boolean notExistsById(Long id) {
+        if (id == null) {
+            return true;
+        }
+        return !accountRepository.existsById(id);
+    }
+
+    @Override
+    public long count() {
+        return accountRepository.count();
+    }
+
+    @Override
+    public Account save(Account entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        if (entity.getId() == null) {
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+            return accountRepository.save(entity);
+        }
+
+        Account accountToPut = accountRepository.findById(entity.getId()).orElseThrow();
+        accountToPut.setLastName(entity.getLastName());
+        accountToPut.setFirstName(entity.getFirstName());
+        accountToPut.setEmail(entity.getEmail());
+        return accountRepository.save(accountToPut);
+    }
+
+    @Override
+    public List<Account> saveAll(Iterable<Account> entities) {
+        if (entities == null) {
+            return null;
+        }
+        return accountRepository.saveAll(entities);
+    }
+
+    @Override
+    public void delete(Account entity) {
+        if (entity == null) {
+            return;
+        }
+
+        try {
+            accountRepository.delete(entity);
+        } catch (EmptyResultDataAccessException e) {
+            log.warn("Delete non existing entity with id=" + entity.getId(), e);
+        }
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (id == null) {
+            return;
+        }
+
         try {
             accountRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            log.info("Delete non existing entity with id=" + id, e);
+            log.warn("Delete non existing entity with id=" + id, e);
         }
     }
 }

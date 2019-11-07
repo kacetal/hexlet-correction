@@ -1,145 +1,148 @@
 package io.hexlet.hexletcorrection.dto.mapper;
 
-import io.hexlet.hexletcorrection.domain.Account;
 import io.hexlet.hexletcorrection.domain.Correction;
-import io.hexlet.hexletcorrection.dto.AccountGetDto;
-import io.hexlet.hexletcorrection.dto.CorrectionGetDto;
-import io.hexlet.hexletcorrection.dto.CorrectionPostDto;
+import io.hexlet.hexletcorrection.dto.account.AccountGetDto;
+import io.hexlet.hexletcorrection.dto.correction.CorrectionGetDto;
+import io.hexlet.hexletcorrection.dto.correction.CorrectionPutDto;
+import io.hexlet.hexletcorrection.dto.correction.CorrectionViewDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Set;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CorrectionMapperTest {
+public class CorrectionMapperTest extends AbstractMapperTest {
 
     @Autowired
     private CorrectionMapper correctionMapper;
 
     @Test
-    public void correctionToCorrectionDtoTest() {
-        final CorrectionGetDto expectedCorrectionGetDto = getCorrectionDto();
-        final CorrectionGetDto actualCorrectionGetDto = correctionMapper.toCorrectionDto(getCorrection());
+    public void correctionToCorrectionGetDtoTest() {
+        final CorrectionGetDto expectedCorrectionGetDto = getCorrectionGetDto();
+        final CorrectionGetDto actualCorrectionGetDto = correctionMapper.toCorrectionGetDto(getCorrection());
 
         assertEquals(expectedCorrectionGetDto.getId(), actualCorrectionGetDto.getId());
+        assertEquals(expectedCorrectionGetDto.getBeforeHighlightText(), actualCorrectionGetDto.getBeforeHighlightText());
+        assertEquals(expectedCorrectionGetDto.getHighlightText(), actualCorrectionGetDto.getHighlightText());
+        assertEquals(expectedCorrectionGetDto.getAfterHighlightText(), actualCorrectionGetDto.getAfterHighlightText());
+        assertEquals(expectedCorrectionGetDto.getReporter(), actualCorrectionGetDto.getReporter());
+        assertEquals(expectedCorrectionGetDto.getResolver().getId(), actualCorrectionGetDto.getResolver().getId());
         assertEquals(expectedCorrectionGetDto.getPageURL(), actualCorrectionGetDto.getPageURL());
         assertEquals(expectedCorrectionGetDto.getHighlightText(), actualCorrectionGetDto.getHighlightText());
-        assertEquals(expectedCorrectionGetDto.getComment(), actualCorrectionGetDto.getComment());
-        assertNull(actualCorrectionGetDto.getAccount().getCorrections());
     }
 
     @Test
-    public void correctionDtoToCorrectionTest() {
+    public void correctionToCorrectionGetDtoNullTest() {
+        assertNull(correctionMapper.toCorrectionGetDto(null));
+    }
+
+    @Test
+    public void correctionToCorrectionViewDtoTest() {
+        final CorrectionViewDto expectedCorrectionViewDto = getCorrectionViewDto();
+        final CorrectionViewDto actualCorrectionViewDto = correctionMapper.toCorrectionViewDto(getCorrection());
+
+        assertEquals(expectedCorrectionViewDto.getId(), actualCorrectionViewDto.getId());
+        assertEquals(expectedCorrectionViewDto.getReporterComment(), actualCorrectionViewDto.getReporterComment());
+        assertEquals(expectedCorrectionViewDto.getCorrecterComment(), actualCorrectionViewDto.getCorrecterComment());
+        assertEquals(expectedCorrectionViewDto.getResolverComment(), actualCorrectionViewDto.getResolverComment());
+        assertEquals(expectedCorrectionViewDto.getBeforeHighlightText(), actualCorrectionViewDto.getBeforeHighlightText());
+        assertEquals(expectedCorrectionViewDto.getHighlightText(), actualCorrectionViewDto.getHighlightText());
+        assertEquals(expectedCorrectionViewDto.getAfterHighlightText(), actualCorrectionViewDto.getAfterHighlightText());
+        assertEquals(expectedCorrectionViewDto.getReporter(), actualCorrectionViewDto.getReporter());
+        assertEquals(expectedCorrectionViewDto.getCorrecter().getId(), actualCorrectionViewDto.getCorrecter().getId());
+        assertEquals(expectedCorrectionViewDto.getResolver().getId(), actualCorrectionViewDto.getResolver().getId());
+        assertEquals(expectedCorrectionViewDto.getPageURL(), actualCorrectionViewDto.getPageURL());
+    }
+
+    @Test
+    public void correctionToCorrectionViewDtoNullTest() {
+        assertNull(correctionMapper.toCorrectionViewDto(null));
+    }
+
+    @Test
+    public void correctionToCorrectionPutDtoTest() {
+        final CorrectionPutDto expectedCorrectionPutDto = getCorrectionPutDto();
+        final CorrectionPutDto actualCorrectionPutDto = correctionMapper.toCorrectionPutDto(getCorrection());
+
+        assertEquals(expectedCorrectionPutDto.getId(), actualCorrectionPutDto.getId());
+        assertEquals(expectedCorrectionPutDto.getReporterComment(), actualCorrectionPutDto.getReporterComment());
+        assertEquals(expectedCorrectionPutDto.getCorrecterComment(), actualCorrectionPutDto.getCorrecterComment());
+        assertEquals(expectedCorrectionPutDto.getResolverComment(), actualCorrectionPutDto.getResolverComment());
+        assertEquals(expectedCorrectionPutDto.getCorrecter().getId(), actualCorrectionPutDto.getCorrecter().getId());
+        assertEquals(expectedCorrectionPutDto.getPageURL(), actualCorrectionPutDto.getPageURL());
+    }
+
+    @Test
+    public void correctionToCorrectionPutDtoNullTest() {
+        assertNull(correctionMapper.toCorrectionPutDto(null));
+    }
+
+    @Test
+    public void putDtoToCorrectionTest() {
         final Correction expectedCorrection = getCorrection();
-        final Correction actualCorrection = correctionMapper.toCorrection(getCorrectionDto());
+        final Correction actualCorrection = correctionMapper.putDtoToCorrection(getCorrectionPutDto());
 
-        assertNull(actualCorrection.getId());
+        assertEquals(expectedCorrection.getId(), actualCorrection.getId());
+        assertEquals(expectedCorrection.getReporterComment(), actualCorrection.getReporterComment());
+        assertEquals(expectedCorrection.getCorrecterComment(), actualCorrection.getCorrecterComment());
+        assertEquals(expectedCorrection.getResolverComment(), actualCorrection.getResolverComment());
+        assertEquals(expectedCorrection.getCorrecter().getId(), actualCorrection.getCorrecter().getId());
         assertEquals(expectedCorrection.getPageURL(), actualCorrection.getPageURL());
-        assertEquals(expectedCorrection.getHighlightText(), actualCorrection.getHighlightText());
-        assertEquals(expectedCorrection.getComment(), actualCorrection.getComment());
-        assertEquals(expectedCorrection.getAccount().getId(), actualCorrection.getAccount().getId());
-        assertNull(actualCorrection.getAccount().getCorrections());
+        assertNull(actualCorrection.getBeforeHighlightText());
+        assertNull(actualCorrection.getHighlightText());
+        assertNull(actualCorrection.getAfterHighlightText());
+        assertNull(actualCorrection.getReporter());
+        assertNull(actualCorrection.getResolver());
     }
 
     @Test
-    public void correctionToCorrectionDtoNullTest() {
-        assertNull(correctionMapper.toCorrectionDto(null));
+    public void putDtoToCorrectionNullTest() {
+        assertNull(correctionMapper.putDtoToCorrection(null));
     }
 
     @Test
-    public void correctionDtoToCorrectionNullTest() {
-        assertNull(correctionMapper.toCorrection(null));
-    }
-
-    @Test
-    public void accountToAccountDtoNullTest() {
-        assertNull(correctionMapper.toAccountDto(null));
-    }
-
-    @Test
-    public void accountDtoToAccountNullTest() {
-        assertNull(correctionMapper.toAccount(null));
-    }
-
-    @Test
-    public void correctionPostDtoTest() {
-        final Correction expectedCorrection = Correction.builder()
-                .pageURL("hexlet.io")
-                .highlightText("some mistake")
-                .beforeHighlight("before highlight")
-                .afterHighlight("after highlight")
-                .comment("some mistake comment")
-                .account(Account.builder().id(5L).build())
-                .build();
+    public void postDtoToCorrectionTest() {
+        final Correction expectedCorrection = getCorrection();
         final Correction actualCorrection = correctionMapper.postDtoToCorrection(getCorrectionPostDto());
 
-        assertEquals(expectedCorrection.getPageURL(), actualCorrection.getPageURL());
+        assertEquals(expectedCorrection.getBeforeHighlightText(), actualCorrection.getBeforeHighlightText());
         assertEquals(expectedCorrection.getHighlightText(), actualCorrection.getHighlightText());
-        assertEquals(expectedCorrection.getComment(), actualCorrection.getComment());
-        assertEquals(expectedCorrection.getAccount().getId(), actualCorrection.getAccount().getId());
+        assertEquals(expectedCorrection.getAfterHighlightText(), actualCorrection.getAfterHighlightText());
+        assertEquals(expectedCorrection.getReporter(), actualCorrection.getReporter());
+        assertEquals(expectedCorrection.getReporterComment(), actualCorrection.getReporterComment());
+        assertEquals(expectedCorrection.getPageURL(), actualCorrection.getPageURL());
         assertNull(actualCorrection.getId());
-        assertNull(actualCorrection.getAccount().getName());
-        assertNull(actualCorrection.getAccount().getEmail());
-        assertNull(actualCorrection.getAccount().getCorrections());
+        assertNull(actualCorrection.getCorrecterComment());
+        assertNull(actualCorrection.getResolverComment());
+        assertNull(actualCorrection.getCorrecter());
+        assertNull(actualCorrection.getResolver());
     }
 
     @Test
-    public void correctionPostDtoNullTest() {
+    public void postDtoToCorrectionNullTest() {
         assertNull(correctionMapper.postDtoToCorrection(null));
     }
 
-    private Correction getCorrection() {
-        return Correction.builder()
-                .id(1L)
-                .pageURL("hexlet.io")
-                .highlightText("some mistake")
-                .beforeHighlight("before highlight")
-                .afterHighlight("after highlight")
-                .comment("some mistake comment")
-                .account(Account
-                        .builder()
-                        .id(5L)
-                        .build())
-                .build();
+    @Test
+    public void accountToAccountGetDtoTest() {
+        final AccountGetDto expectedAccountGetDto = getAccountGetDto();
+        final AccountGetDto actualAccountGetDto = correctionMapper.accountToAccountGetDto(getAccount());
+        assertEquals(expectedAccountGetDto.getId(), actualAccountGetDto.getId());
+        assertEquals(expectedAccountGetDto.getUsername(), actualAccountGetDto.getUsername());
+        assertEquals(expectedAccountGetDto.getLastName(), actualAccountGetDto.getLastName());
+        assertEquals(expectedAccountGetDto.getFirstName(), actualAccountGetDto.getFirstName());
+        assertEquals(expectedAccountGetDto.getEmail(), actualAccountGetDto.getEmail());
+        assertEquals(expectedAccountGetDto.getNumberCorrectionsInProgress(), actualAccountGetDto.getNumberCorrectionsInProgress());
+        assertEquals(expectedAccountGetDto.getNumberCorrectionsResolved(), actualAccountGetDto.getNumberCorrectionsResolved());
     }
 
-    private CorrectionGetDto getCorrectionDto() {
-        return CorrectionGetDto.builder()
-                .id(1L)
-                .pageURL("hexlet.io")
-                .highlightText("some mistake")
-                .beforeHighlight("before highlight")
-                .afterHighlight("after highlight")
-                .comment("some mistake comment")
-                .account(AccountGetDto.builder()
-                        .name("Anatoly")
-                        .email("anatoly@hexlet.io")
-                        .corrections(
-                                Set.of(CorrectionGetDto.builder().id(1L).build(), CorrectionGetDto.builder().id(2L).build()))
-                        .build())
-                .build();
-    }
-
-    private CorrectionPostDto getCorrectionPostDto() {
-        return CorrectionPostDto.builder()
-                .pageURL("hexlet.io")
-                .highlightText("some mistake")
-                .beforeHighlight("before highlight")
-                .afterHighlight("after highlight")
-                .comment("some mistake comment")
-                .account(AccountGetDto.builder()
-                        .name("Anatoly")
-                        .email("anatoly@hexlet.io")
-                        .corrections(
-                                Set.of(CorrectionGetDto.builder().id(1L).build(), CorrectionGetDto.builder().id(2L).build()))
-                        .build())
-                .build();
+    @Test
+    public void accountToAccountGetDtoNullTest() {
+        assertNull(correctionMapper.accountToAccountGetDto(null));
     }
 }

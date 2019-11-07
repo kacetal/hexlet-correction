@@ -2,7 +2,7 @@ package io.hexlet.hexletcorrection.controller.api.v1;
 
 import io.hexlet.hexletcorrection.controller.AbstractControllerTest;
 import io.hexlet.hexletcorrection.domain.Account;
-import io.hexlet.hexletcorrection.dto.AccountPostDto;
+import io.hexlet.hexletcorrection.dto.account.AccountPostDto;
 import io.restassured.http.ContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +30,8 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     @Test
     public void getAllAccountsTest() {
-        createCorrection(createAccount(DEFAULT_USER_NAME, "getAllAccounts@mail.com"));
+        final Account account = createAccount(LOGIN, "getAllAccounts@mail.com");
+        createCorrection(account, account);
         given().when()
                 .get(TEST_HOST + ":" + port + API_PATH_V1 + ACCOUNTS_PATH)
                 .then()
@@ -40,7 +41,8 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     @Test(expected = NumberFormatException.class)
     public void getAllAccountsRecursionInfiniteTest() {
-        createCorrection(createAccount(DEFAULT_USER_NAME, "getAllAccountsRecursionInfinite@mail.com"));
+        final Account account = createAccount(LOGIN, "getAllAccountsRecursionInfinite@mail.com");
+        createCorrection(account, account);
         given().when()
                 .get(TEST_HOST + ":" + port + API_PATH_V1 + ACCOUNTS_PATH)
                 .then()
@@ -52,7 +54,7 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     @Test
     public void getAccountByIdTest() {
-        Account account = createAccount(DEFAULT_USER_NAME, "getAccountById@mail.com");
+        Account account = createAccount(LOGIN, "getAccountById@mail.com");
 
         given().when()
                 .get(TEST_HOST + ":" + port + API_PATH_V1 + ACCOUNTS_PATH + "/" + account.getId())
@@ -74,7 +76,7 @@ public class AccountControllerTest extends AbstractControllerTest {
     @Test
     public void getAccountByNameTest() {
         given().when()
-                .get(TEST_HOST + ":" + port + API_PATH_V1 + ACCOUNTS_PATH + "/?name=" + DEFAULT_USER_NAME)
+                .get(TEST_HOST + ":" + port + API_PATH_V1 + ACCOUNTS_PATH + "/?name=" + LOGIN)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON);
@@ -82,7 +84,7 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     @Test
     public void getAccountByFalseNameTest() {
-        String falseName = DEFAULT_USER_NAME + "A";
+        String falseName = LOGIN + "A";
 
         given().when()
                 .get(TEST_HOST + ":" + port + API_PATH_V1 + ACCOUNTS_PATH + "/?name=" + falseName)
@@ -93,12 +95,7 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     @Test
     public void postAccountTest() {
-        AccountPostDto account = AccountPostDto.builder()
-                .name(DEFAULT_USER_NAME)
-                .email("postAccount@hexlet.io")
-                .password(DEFAULT_USER_PASSWORD)
-                .passwordConfirm(DEFAULT_USER_PASSWORD)
-                .build();
+        AccountPostDto account = getAccountPostDto();
 
         given().when()
                 .body(account)
@@ -110,12 +107,7 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     @Test
     public void postAccountDoubleTest() {
-        AccountPostDto account = AccountPostDto.builder()
-                .name(DEFAULT_USER_NAME)
-                .email("postAccountDouble@hexlet.io")
-                .password(DEFAULT_USER_PASSWORD)
-                .passwordConfirm(DEFAULT_USER_PASSWORD)
-                .build();
+        AccountPostDto account = getAccountPostDto();
 
         given().when()
                 .body(account)
@@ -124,12 +116,7 @@ public class AccountControllerTest extends AbstractControllerTest {
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
 
-        AccountPostDto account2 = AccountPostDto.builder()
-                .name(DEFAULT_USER_NAME)
-                .email("postAccountDouble@hexlet.io")
-                .password(DEFAULT_USER_PASSWORD)
-                .passwordConfirm(DEFAULT_USER_PASSWORD)
-                .build();
+        AccountPostDto account2 = getAccountPostDto();
 
         given().when()
                 .body(account2)
@@ -141,10 +128,7 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     @Test
     public void postAccountNameEmptyTest() {
-        Account account = Account.builder()
-                .email("postAccountNameEmpty@hexlet.io")
-                .password(DEFAULT_USER_PASSWORD)
-                .build();
+        Account account = getAccount();
 
         given().when()
                 .body(account)
@@ -159,8 +143,8 @@ public class AccountControllerTest extends AbstractControllerTest {
     public void postAccountNameTooLongTest() {
         Account account = Account.builder()
                 .email("artem@hexlet.io")
-                .password(DEFAULT_USER_PASSWORD)
-                .name("A".repeat(MAX_ACCOUNT_NAME + 1)).build();
+                .password(PASSWORD)
+                .username("A".repeat(MAX_ACCOUNT_NAME + 1)).build();
 
         given().when()
                 .body(account)
@@ -174,8 +158,8 @@ public class AccountControllerTest extends AbstractControllerTest {
     @Test
     public void postAccountEmailEmptyTest() {
         Account account = Account.builder()
-                .name("Artem")
-                .password(DEFAULT_USER_PASSWORD)
+                .username("Artem")
+                .password(PASSWORD)
                 .build();
 
         given().when()
@@ -190,9 +174,9 @@ public class AccountControllerTest extends AbstractControllerTest {
     @Test
     public void postAccountEmailInvalidTest() {
         Account account = Account.builder()
-                .name("Artem")
+                .username("Artem")
                 .email("123")
-                .password(DEFAULT_USER_PASSWORD)
+                .password(PASSWORD)
                 .build();
 
         given().when()
@@ -206,7 +190,7 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     @Test
     public void deleteAccountTest() {
-        Account account = createAccount(DEFAULT_USER_NAME, "deleteAccount@mail.com");
+        Account account = createAccount(LOGIN, "deleteAccount@mail.com");
 
         given().when()
                 .delete(TEST_HOST + ":" + port + API_PATH_V1 + ACCOUNTS_PATH + "/" + account.getId())

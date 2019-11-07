@@ -1,0 +1,11 @@
+account:
+  field:
+    password:
+      length:
+        min: 6
+    comment:
+      length:
+        max: 200
+    name:
+      length:
+        max: 50

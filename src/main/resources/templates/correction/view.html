@@ -9,7 +9,7 @@
     <div class="container">
         <h4 th:text="#{account.header.info}"></h4>
         <div class="alert alert-warning alert-dismissible fade show"
-             role="alert" th:if="${error}" th:text="${error}">
+             role="alert" th:if="${warning}" th:text="${warning}">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -48,7 +48,7 @@
                     </table>
                 </div>
             </div>
-            <div th:unless="${#lists.isEmpty(accountGetDto.corrections)}">
+            <div th:unless="${#lists.isEmpty(accountGetDto.corrections)}" class="table-responsive-md">
                 <div class="card border-secondary mb-12"
                      style="max-width: 18rem;"
                      th:each="correctionGetDto : ${accountGetDto.corrections}"
@@ -70,6 +70,41 @@
                         <p class="card-text" th:text="*{comment}"></p>
                     </div>
                 </div>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th th:text="#{field.id}"></th>
+                        <th th:text="#{correction.field.url}"></th>
+                        <th th:text="#{correction.field.comment}"></th>
+                        <th th:text="#{correction.field.highlight}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="correctionGetDto : ${accountGetDto.corrections}" th:object="${correctionGetDto}">
+                        <td th:text="*{id}"></td>
+                        <td th:text="*{pageURL}"></td>
+                        <td th:text="*{comment}"></td>
+                        <td th:text="*{beforeHighlight}"></td>
+                        <td th:text="*{highlightText}"></td>
+                        <td th:text="*{highlightText}"></td>
+                        <td>
+                            <a class="btn btn-outline-info"
+                               th:href="${'/corrections/' + correctionGetDto.id}" th:text="#{action.view}"></a>
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-secondary"
+                               th:href="${'/corrections/update/' + correctionGetDto.id}" th:text="#{action.edit}"></a>
+                        </td>
+                        <td>
+                            <form action="#" th:action="@{'/corrections/{id}'(id=${accountGetDto.id})}" th:method="delete">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button class="btn btn-outline-danger" type="submit" id="deleteCorrection"
+                                        th:text="#{action.delete}"></button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

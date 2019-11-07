@@ -1,8 +1,10 @@
 package io.hexlet.hexletcorrection.dto.mapper;
 
 import io.hexlet.hexletcorrection.domain.Account;
-import io.hexlet.hexletcorrection.dto.AccountGetDto;
-import io.hexlet.hexletcorrection.dto.CorrectionGetDto;
+import io.hexlet.hexletcorrection.dto.account.AccountGetDto;
+import io.hexlet.hexletcorrection.dto.account.AccountPutDto;
+import io.hexlet.hexletcorrection.dto.account.AccountViewDto;
+import io.hexlet.hexletcorrection.dto.correction.CorrectionGetDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
@@ -25,9 +27,12 @@ public class AccountMapperTest extends AbstractMapperTest {
         final AccountGetDto expectedAccountGetDto = getAccountGetDto();
         final AccountGetDto actualAccountGetDto = accountMapper.toAccountGetDto(getAccount());
         assertEquals(expectedAccountGetDto.getId(), actualAccountGetDto.getId());
-        assertEquals(expectedAccountGetDto.getName(), actualAccountGetDto.getName());
+        assertEquals(expectedAccountGetDto.getUsername(), actualAccountGetDto.getUsername());
+        assertEquals(expectedAccountGetDto.getLastName(), actualAccountGetDto.getLastName());
+        assertEquals(expectedAccountGetDto.getFirstName(), actualAccountGetDto.getFirstName());
         assertEquals(expectedAccountGetDto.getEmail(), actualAccountGetDto.getEmail());
-        assertEquals(expectedAccountGetDto.getCorrections().size(), actualAccountGetDto.getCorrections().size());
+        assertEquals(expectedAccountGetDto.getNumberCorrectionsInProgress(), actualAccountGetDto.getNumberCorrectionsInProgress());
+        assertEquals(expectedAccountGetDto.getNumberCorrectionsResolved(), actualAccountGetDto.getNumberCorrectionsResolved());
     }
 
     @Test
@@ -36,71 +41,90 @@ public class AccountMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    public void accountToAccountGetDtoWithoutCorrectionsTest() {
-        final AccountGetDto expectedAccountGetDto = getAccountGetDtoWithoutCorrections();
-        final AccountGetDto actualAccountGetDto = accountMapper.toAccountGetDtoWithoutCorrections(getAccount());
-        assertEquals(expectedAccountGetDto.getId(), actualAccountGetDto.getId());
-        assertEquals(expectedAccountGetDto.getName(), actualAccountGetDto.getName());
-        assertEquals(expectedAccountGetDto.getEmail(), actualAccountGetDto.getEmail());
-        assertNull(actualAccountGetDto.getCorrections());
+    public void accountToAccountViewDtoTest() {
+        final AccountViewDto expectedAccountViewDto = getAccountViewDto();
+        final AccountViewDto actualAccountViewDto = accountMapper.toAccountViewDto(getAccount());
+        assertEquals(expectedAccountViewDto.getId(), actualAccountViewDto.getId());
+        assertEquals(expectedAccountViewDto.getUsername(), actualAccountViewDto.getUsername());
+        assertEquals(expectedAccountViewDto.getLastName(), actualAccountViewDto.getLastName());
+        assertEquals(expectedAccountViewDto.getFirstName(), actualAccountViewDto.getFirstName());
+        assertEquals(expectedAccountViewDto.getEmail(), actualAccountViewDto.getEmail());
+        assertEquals(expectedAccountViewDto.getCorrectionsInProgress().size(), actualAccountViewDto.getCorrectionsInProgress().size());
+        assertEquals(expectedAccountViewDto.getCorrectionsResolved().size(), actualAccountViewDto.getCorrectionsResolved().size());
     }
 
     @Test
-    public void accountToAccountGetDtoWithoutCorrectionsNullTest() {
-        assertNull(accountMapper.toAccountGetDtoWithoutCorrections(null));
+    public void accountToAccountViewDtoNullTest() {
+        assertNull(accountMapper.toAccountViewDto(null));
     }
 
     @Test
-    public void accountPutDtoToAccountTest() {
+    public void accountToAccountPutDtoTest() {
+        final AccountPutDto expectedAccountPutDto = getAccountPutDto();
+        final AccountPutDto actualAccountPutDto = accountMapper.toAccountPutDto(getAccount());
+        assertEquals(expectedAccountPutDto.getId(), actualAccountPutDto.getId());
+        assertEquals(expectedAccountPutDto.getLastName(), actualAccountPutDto.getLastName());
+        assertEquals(expectedAccountPutDto.getFirstName(), actualAccountPutDto.getFirstName());
+        assertEquals(expectedAccountPutDto.getEmail(), actualAccountPutDto.getEmail());
+        assertNull(actualAccountPutDto.getPassword());
+    }
+
+    @Test
+    public void accountToAccountPutDtoNullTest() {
+        assertNull(accountMapper.toAccountPutDto(null));
+    }
+
+    @Test
+    public void putDtoToAccountTest() {
         final Account expectedAccount = getAccount();
         final Account actualAccount = accountMapper.putDtoToAccount(getAccountPutDto());
         assertEquals(expectedAccount.getId(), actualAccount.getId());
-        assertEquals(expectedAccount.getName(), actualAccount.getName());
+        assertEquals(expectedAccount.getUsername(), actualAccount.getUsername());
+        assertEquals(expectedAccount.getLastName(), actualAccount.getLastName());
+        assertEquals(expectedAccount.getFirstName(), actualAccount.getFirstName());
         assertEquals(expectedAccount.getEmail(), actualAccount.getEmail());
         assertEquals(expectedAccount.getPassword(), actualAccount.getPassword());
-        assertNotEquals(expectedAccount.getCorrections(), actualAccount.getCorrections());
-        assertNull(actualAccount.getCorrections());
+        assertNotNull(actualAccount.getPassword());
     }
 
     @Test
-    public void accountPutDtoToAccountNullTest() {
+    public void putDtoToAccountNullTest() {
         assertNull(accountMapper.putDtoToAccount(null));
     }
 
     @Test
-    public void accountPostDtoToAccountTest() {
+    public void postDtoToAccountTest() {
         final Account expectedAccount = getAccount();
         final Account actualAccount = accountMapper.postDtoToAccount(getAccountPostDto());
-        assertEquals(expectedAccount.getName(), actualAccount.getName());
+        assertEquals(expectedAccount.getUsername(), actualAccount.getUsername());
+        assertEquals(expectedAccount.getLastName(), actualAccount.getLastName());
+        assertEquals(expectedAccount.getFirstName(), actualAccount.getFirstName());
         assertEquals(expectedAccount.getEmail(), actualAccount.getEmail());
         assertEquals(expectedAccount.getPassword(), actualAccount.getPassword());
-        assertNotEquals(expectedAccount.getCorrections(), actualAccount.getCorrections());
-        assertNotEquals(expectedAccount.getId(), actualAccount.getId());
-        assertNull(actualAccount.getCorrections());
         assertNull(actualAccount.getId());
     }
 
     @Test
-    public void accountPostDtoToAccountNullTest() {
+    public void postDtoToAccountNullTest() {
         assertNull(accountMapper.postDtoToAccount(null));
     }
 
     @Test
     public void correctionsToCorrectionsGetDtoTest() {
         final CorrectionGetDto expectedCorrectionGetDto = getCorrectionGetDto();
-        final CorrectionGetDto actualCorrectionGetDto = accountMapper.toCorrectionsGetDto(getCorrection());
+        final CorrectionGetDto actualCorrectionGetDto = accountMapper.correctionToCorrectionGetDto(getCorrection());
         assertEquals(expectedCorrectionGetDto.getId(), actualCorrectionGetDto.getId());
-        assertEquals(expectedCorrectionGetDto.getComment(), actualCorrectionGetDto.getComment());
-        assertEquals(expectedCorrectionGetDto.getBeforeHighlight(), actualCorrectionGetDto.getBeforeHighlight());
+        assertEquals(expectedCorrectionGetDto.getBeforeHighlightText(), actualCorrectionGetDto.getBeforeHighlightText());
         assertEquals(expectedCorrectionGetDto.getHighlightText(), actualCorrectionGetDto.getHighlightText());
-        assertEquals(expectedCorrectionGetDto.getAfterHighlight(), actualCorrectionGetDto.getAfterHighlight());
+        assertEquals(expectedCorrectionGetDto.getAfterHighlightText(), actualCorrectionGetDto.getAfterHighlightText());
+        assertEquals(expectedCorrectionGetDto.getReporter(), actualCorrectionGetDto.getReporter());
         assertEquals(expectedCorrectionGetDto.getPageURL(), actualCorrectionGetDto.getPageURL());
-        assertEquals(expectedCorrectionGetDto.getAccount(), actualCorrectionGetDto.getAccount());
-        assertNull(actualCorrectionGetDto.getAccount());
+        assertNull(actualCorrectionGetDto.getCorrecter());
+        assertNull(actualCorrectionGetDto.getResolver());
     }
 
     @Test
     public void correctionsToCorrectionsGetDtoNullTest() {
-        assertNull(accountMapper.toCorrectionsGetDto(null));
+        assertNull(accountMapper.correctionToCorrectionGetDto(null));
     }
 }

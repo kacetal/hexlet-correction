@@ -2,15 +2,12 @@ package io.hexlet.hexletcorrection.controller;
 
 import io.hexlet.hexletcorrection.domain.Account;
 import io.hexlet.hexletcorrection.domain.Correction;
+import io.hexlet.hexletcorrection.dto.mapper.AbstractMapperTest;
 import io.hexlet.hexletcorrection.service.AccountService;
 import io.hexlet.hexletcorrection.service.CorrectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractControllerTest {
-
-    protected final String DEFAULT_USER_NAME = "Test user";
-
-    protected final String DEFAULT_USER_PASSWORD = "password";
+public abstract class AbstractControllerTest extends AbstractMapperTest {
 
     @Autowired
     protected AccountService accountService;
@@ -18,28 +15,35 @@ public abstract class AbstractControllerTest {
     @Autowired
     protected CorrectionService correctionService;
 
-    protected Account createAccount(String name, String email) {
-        Account account = Account.builder()
-                .name(name)
-                .password(DEFAULT_USER_PASSWORD)
-                .email(email)
-                .build();
-
-        return accountService.create(account);
+    protected Account createAccount(String login, String email) {
+        Account account = getAccount();
+        account.setId(null);
+        account.setUsername(login);
+        account.setEmail(email);
+        return accountService.save(account);
     }
 
-    protected Correction createCorrection(Account account) {
-        Correction correction = Correction.builder()
-                .comment("test comment")
-                .highlightText("text to correction")
-                .pageURL("hexlet.io")
-                .account(account)
-                .build();
+    protected Account createAccount() {
+        Account account = getAccount();
+        account.setId(null);
+        return accountService.save(account);
+    }
 
-        return correctionService.create(correction);
+    protected Correction createCorrection(Account resolver, Account correcter) {
+        Correction correction = getCorrection();
+        correction.setId(null);
+        correction.setResolver(resolver);
+        correction.setCorrecter(correcter);
+        return correctionService.save(correction);
+    }
+
+    protected Correction createCorrection() {
+        Correction correction = getCorrection();
+        correction.setId(null);
+        return correctionService.save(correction);
     }
 
     protected void deleteAccount(final Long id) {
-        accountService.delete(id);
+        accountService.deleteById(id);
     }
 }

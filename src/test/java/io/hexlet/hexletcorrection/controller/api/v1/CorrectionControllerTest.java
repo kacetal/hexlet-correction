@@ -33,7 +33,8 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void getAllCorrectionsTest() {
-        createCorrection(createAccount(DEFAULT_USER_NAME, "getAllCorrections@mail.com"));
+        final Account account = createAccount(LOGIN, "getAllCorrections@mail.com");
+        createCorrection(account, account);
         given().when()
                 .get(TEST_HOST + ":" + port + API_PATH_V1 + CORRECTIONS_PATH)
                 .then()
@@ -43,7 +44,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void getAllCorrectionsRecursionInfiniteTest() {
-        createCorrection(createAccount(DEFAULT_USER_NAME, "getAllCorrectionsRecursionInfinite@mail.com"));
+        createCorrection();
         List<Correction> list = given().when()
                 .get(TEST_HOST + ":" + port + API_PATH_V1 + CORRECTIONS_PATH)
                 .then()
@@ -56,7 +57,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void getCorrectionByIdTest() {
-        Correction savedCorrection = createCorrection(createAccount(DEFAULT_USER_NAME, "getCorrectionById@mail.com"));
+        Correction savedCorrection = createCorrection();
 
         given().when()
                 .get(TEST_HOST + ":" + port + API_PATH_V1 + CORRECTIONS_PATH + "/" + savedCorrection.getId())
@@ -67,7 +68,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void getCorrectionByFalseIdTest() {
-        long falseId = createCorrection(createAccount(DEFAULT_USER_NAME, "getCorrectionByFalseId@mail.com")).getId() + 1L;
+        long falseId = createCorrection().getId() + 1L;
 
         given().when()
                 .get(TEST_HOST + ":" + port + API_PATH_V1 + CORRECTIONS_PATH + "/" + falseId)
@@ -79,7 +80,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void getCorrectionByUrlTest() {
-        Correction savedCorrection = createCorrection(createAccount(DEFAULT_USER_NAME, "getCorrectionByUrl@mail.com"));
+        Correction savedCorrection = createCorrection();
 
         given().when()
                 .get(TEST_HOST + ":" + port + API_PATH_V1 + CORRECTIONS_PATH + "/?url=" + savedCorrection.getPageURL())
@@ -90,14 +91,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void postCorrectionTest() {
-        Account account = createAccount(DEFAULT_USER_NAME, "postCorrection@mail.com");
-
-        Correction correction = Correction.builder()
-                .comment("test comment")
-                .highlightText("text to correction")
-                .pageURL("hexlet.io")
-                .account(account)
-                .build();
+        Correction correction = getCorrection();
 
         given().when()
                 .body(correction)
@@ -109,12 +103,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void postCorrectionCommentEmptyTest() {
-        Correction correction = Correction.builder()
-                .comment("")
-                .highlightText("text to correction")
-                .pageURL("hexlet.io")
-                .account(createAccount(DEFAULT_USER_NAME,"postCorrectionCommentEmpty@mail.com"))
-                .build();
+        Correction correction = getCorrection();
 
         given().when()
                 .body(correction)
@@ -127,12 +116,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void postCorrectionCommentTooLongTest() {
-        Correction correction = Correction.builder()
-                .comment("A".repeat(MAX_COMMENT_LENGTH + 1))
-                .highlightText("text to correction")
-                .pageURL("hexlet.io")
-                .account(createAccount(DEFAULT_USER_NAME, "postCorrectionCommentTooLong@mail.com"))
-                .build();
+        Correction correction = getCorrection();
 
         given().when()
                 .body(correction)
@@ -145,12 +129,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void postCorrectionHighlightTextEmptyTest() {
-        Correction correction = Correction.builder()
-                .comment("test comment")
-                .highlightText("")
-                .pageURL("hexlet.io")
-                .account(createAccount(DEFAULT_USER_NAME, "postCorrectionHighlightTextEmpty@mail.com"))
-                .build();
+        Correction correction = getCorrection();
 
         given().when()
                 .body(correction)
@@ -163,11 +142,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void postCorrectionAccountNullTest() {
-        Correction correction = Correction.builder()
-                .comment("test comment")
-                .highlightText("text to correction")
-                .pageURL("hexlet.io")
-                .build();
+        Correction correction = getCorrection();
 
         given().when()
                 .body(correction)
@@ -180,11 +155,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void postCorrectionURLEmptyTest() {
-        Correction correction = Correction.builder()
-                .comment("test comment")
-                .highlightText("text to correction")
-                .account(createAccount(DEFAULT_USER_NAME, "postCorrectionURLEmpty@mail.com"))
-                .build();
+        Correction correction = getCorrection();
 
         given().when()
                 .body(correction)
@@ -197,7 +168,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
 
     @Test
     public void deleteCorrectionTest() {
-        Correction savedCorrection = createCorrection(createAccount(DEFAULT_USER_NAME, "deleteCorrection@mail.com"));
+        Correction savedCorrection = createCorrection();
 
         given().when()
                 .delete(TEST_HOST + ":" + port + API_PATH_V1 + CORRECTIONS_PATH + "/" + savedCorrection.getId())

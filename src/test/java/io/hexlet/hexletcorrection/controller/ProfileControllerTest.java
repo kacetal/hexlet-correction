@@ -43,19 +43,19 @@ public class ProfileControllerTest extends AbstractControllerTest {
     @WithMockUser("profilePageTest@email.com")
     public void profilePageTest() throws Exception {
         final String email = "profilePageTest@email.com";
-        createAccount(DEFAULT_USER_NAME, email);
+        createAccount(LOGIN, email);
 
         mockMvc.perform(get(PROFILE_PATH).contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(content().string(containsString(DEFAULT_USER_NAME)));
+                .andExpect(content().string(containsString(LOGIN)));
     }
 
     @Test
     @WithMockUser("profileSettingsPageTest@email.com")
     public void profileSettingsPageTest() throws Exception {
         final String email = "profileSettingsPageTest@email.com";
-        createAccount(DEFAULT_USER_NAME, email);
+        createAccount(LOGIN, email);
 
         mockMvc.perform(get(PROFILE_SETTINGS_PATH).contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())

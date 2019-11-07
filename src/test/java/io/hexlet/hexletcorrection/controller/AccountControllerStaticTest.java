@@ -2,7 +2,7 @@ package io.hexlet.hexletcorrection.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hexlet.hexletcorrection.domain.Account;
-import io.hexlet.hexletcorrection.dto.AccountGetDto;
+import io.hexlet.hexletcorrection.dto.account.AccountGetDto;
 import io.restassured.http.ContentType;
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 
 import static io.hexlet.hexletcorrection.controller.ControllerConstants.ACCOUNTS_PATH;
 import static java.lang.String.format;
@@ -76,10 +75,10 @@ public class AccountControllerStaticTest extends AbstractControllerTest {
         mvc.perform(get(ACCOUNTS_PATH))
             .andExpect(status().isOk())
             .andExpect(content().contentType(CONTENT_TYPE))
-            .andExpect(content().string(containsString(format("<td>%s</td>", testAccountOne.getName()))))
+            .andExpect(content().string(containsString(format("<td>%s</td>", testAccountOne.getUsername()))))
             .andExpect(content().string(containsString(format("<td>%d</td>", testAccountOne.getId()))))
             .andExpect(content().string(containsString(format("<td>%s</td>", testAccountOne.getEmail()))))
-            .andExpect(content().string(containsString(format("<td>%s</td>", testAccountTwo.getName()))))
+            .andExpect(content().string(containsString(format("<td>%s</td>", testAccountTwo.getUsername()))))
             .andExpect(content().string(containsString(format("<td>%d</td>", testAccountTwo.getId()))))
             .andExpect(content().string(containsString(format("<td>%s</td>", testAccountTwo.getEmail()))));
     }
@@ -100,7 +99,7 @@ public class AccountControllerStaticTest extends AbstractControllerTest {
         mvc.perform(get(ACCOUNTS_PATH + "/" + testAccountOne.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(CONTENT_TYPE))
-            .andExpect(content().string(containsString(format("<td>%s</td>", testAccountOne.getName()))))
+            .andExpect(content().string(containsString(format("<td>%s</td>", testAccountOne.getUsername()))))
             .andExpect(content().string(containsString(format("<td>%d</td>", testAccountOne.getId()))))
             .andExpect(content().string(containsString(format("<td>%s</td>", testAccountOne.getEmail()))));
     }
@@ -108,13 +107,13 @@ public class AccountControllerStaticTest extends AbstractControllerTest {
     @WithMockUser
     @Test
     public void getAccountByName() throws Exception {
-        mvc.perform(get(ACCOUNTS_PATH).param("name", testAccountOne.getName()))
+        mvc.perform(get(ACCOUNTS_PATH).param("name", testAccountOne.getUsername()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(CONTENT_TYPE))
-            .andExpect(content().string(containsString(format("<td>%s</td>", testAccountOne.getName()))))
+            .andExpect(content().string(containsString(format("<td>%s</td>", testAccountOne.getUsername()))))
             .andExpect(content().string(containsString(format("<td>%d</td>", testAccountOne.getId()))))
             .andExpect(content().string(containsString(format("<td>%s</td>", testAccountOne.getEmail()))))
-            .andExpect(content().string(not(containsString(format("<td>%s</td>", testAccountTwo.getName())))))
+            .andExpect(content().string(not(containsString(format("<td>%s</td>", testAccountTwo.getUsername())))))
             .andExpect(content().string(not(containsString(format("<td>%d</td>", testAccountTwo.getId())))))
             .andExpect(content().string(not(containsString(format("<td>%s</td>", testAccountTwo.getEmail())))));
     }
@@ -131,20 +130,23 @@ public class AccountControllerStaticTest extends AbstractControllerTest {
     @Test
     public void postAccount() throws Exception {
         String testEmail = "test@email.com";
+        String testLogin = "testLogin";
 
         mvc.perform(
             post(ACCOUNTS_PATH)
+                .param("login", testLogin)
                 .param("email", testEmail)
-                .param("name", DEFAULT_USER_NAME)
-                .param("password", DEFAULT_USER_PASSWORD)
-                .param("passwordConfirm", DEFAULT_USER_PASSWORD)
+                .param("lastName", LAST_NAME)
+                .param("firstName", FIRST_NAME)
+                .param("password", PASSWORD)
+                .param("passwordConfirm", PASSWORD)
                 .with(csrf())
         ).andExpect(status().isFound());
 
         Account actualAccount = accountService.findByEmail(testEmail).orElse(null);
         assertNotNull(actualAccount);
         assertEquals(actualAccount.getEmail(), testEmail);
-        assertEquals(actualAccount.getName(), DEFAULT_USER_NAME);
+        assertEquals(actualAccount.getUsername(), testLogin);
     }
 
     @WithMockUser
@@ -153,22 +155,18 @@ public class AccountControllerStaticTest extends AbstractControllerTest {
         mvc.perform(get(format("%s/edit/%d", ACCOUNTS_PATH, testAccountOne.getId())))
             .andExpect(status().isOk())
             .andExpect(content().contentType(CONTENT_TYPE))
-            .andExpect(content().string(containsString(format("name=\"name\" value=\"%s\">", testAccountOne.getName()))))
+            .andExpect(content().string(containsString(format("name=\"name\" value=\"%s\">", testAccountOne.getUsername()))))
             .andExpect(content().string(containsString(format("name=\"email\" value=\"%s\">", testAccountOne.getEmail()))));
     }
 
     @WithMockUser
     @Test
     public void putAccount() throws Exception {
-        final String newName = "new" + testAccountOne.getName();
+        final String newName = "new" + testAccountOne.getUsername();
         final String newEmail = "new" + testAccountOne.getEmail();
         final Long accountId = testAccountOne.getId();
 
-        AccountGetDto accountGetDto = AccountGetDto.builder()
-            .name(newName)
-            .email(newEmail)
-            .corrections(Collections.emptySet())
-            .build();
+        AccountGetDto accountGetDto = getAccountGetDto();
 
         mvc.perform(
             put(ACCOUNTS_PATH)
@@ -180,7 +178,7 @@ public class AccountControllerStaticTest extends AbstractControllerTest {
         Account accountActual = accountService.findById(accountId).orElse(null);
         assertNotNull(accountActual);
         assertEquals(accountActual.getEmail(), newEmail);
-        assertEquals(accountActual.getName(), newName);
+        assertEquals(accountActual.getUsername(), newName);
         assertEquals(accountActual.getId(), accountId);
     }
 
