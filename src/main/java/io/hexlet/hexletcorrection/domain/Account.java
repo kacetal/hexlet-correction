@@ -18,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Collection;
@@ -25,9 +27,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.INVALID_EMAIL;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.MAX_ACCOUNT_NAME;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_EMPTY;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_EMAIL_ERROR_INVALID;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_FIRST_NAME_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_FIRST_NAME_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_LAST_NAME_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_LAST_NAME_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_PASSWORD_ERROR_LENGTH_MIN;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_PASSWORD_LENGTH_MIN;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_USERNAME_ERROR_BLANK;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_USERNAME_ERROR_LENGTH_SIZE;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_USERNAME_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_USERNAME_LENGTH_MIN;
 import static javax.persistence.FetchType.EAGER;
 
 @Getter
@@ -43,23 +53,28 @@ public class Account implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, updatable = false, unique = true)
-    @NotBlank(message = "Login " + NOT_EMPTY)
-    @Size(message = "Username size must be between {0} and {1} characters", min = 2, max = MAX_ACCOUNT_NAME)
+    @Column(nullable = false, updatable = false, unique = true, length = ACCOUNT_USERNAME_LENGTH_MAX)
+    @NotBlank(message = ACCOUNT_USERNAME_ERROR_BLANK)
+    @Size(message = ACCOUNT_USERNAME_ERROR_LENGTH_SIZE,
+        min = ACCOUNT_USERNAME_LENGTH_MIN,
+        max = ACCOUNT_USERNAME_LENGTH_MAX)
     private String username;
 
-    @Column(name = "last_name")
-    @Size(message = "Last name not be more than " + MAX_ACCOUNT_NAME + " characters", max = MAX_ACCOUNT_NAME)
+    @Column(name = "last_name", length = ACCOUNT_LAST_NAME_LENGTH_MAX)
+    @Max(message = ACCOUNT_LAST_NAME_ERROR_LENGTH_MAX, value = ACCOUNT_LAST_NAME_LENGTH_MAX)
     private String lastName;
 
-    @Column(name = "first_name")
-    @Size(message = "First name not be more than " + MAX_ACCOUNT_NAME + " characters", max = MAX_ACCOUNT_NAME)
+    @Column(name = "first_name", length = ACCOUNT_FIRST_NAME_LENGTH_MAX)
+    @Max(message = ACCOUNT_FIRST_NAME_ERROR_LENGTH_MAX, value = ACCOUNT_FIRST_NAME_LENGTH_MAX)
     private String firstName;
 
     @Column(nullable = false, unique = true)
-    @NotBlank(message = "Email " + NOT_EMPTY)
-    @Email(message = INVALID_EMAIL)
+    @Email(message = ACCOUNT_EMAIL_ERROR_INVALID)
     private String email;
+
+    @Column(nullable = false)
+    @Min(message = ACCOUNT_PASSWORD_ERROR_LENGTH_MIN, value = ACCOUNT_PASSWORD_LENGTH_MIN)
+    private String password;
 
     @OneToMany(mappedBy = "correcter", fetch = EAGER)
     @Column(name = "corrections_in_progress")
@@ -70,11 +85,6 @@ public class Account implements UserDetails {
     @Column(name = "corrections_resolved")
     @JsonIgnoreProperties({"correcter", "resolver"})
     private Set<Correction> correctionsResolved = new HashSet<>();
-
-    @Column(nullable = false)
-    @NotBlank(message = "Password " + NOT_EMPTY)
-    @Size(message = "Password size must be between {0} and {1} characters", min = 6, max = 20)
-    private String password;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

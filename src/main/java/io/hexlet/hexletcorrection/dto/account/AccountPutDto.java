@@ -9,14 +9,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.INVALID_EMAIL;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.MAX_ACCOUNT_NAME;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_EMPTY;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_NULL;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_EMAIL_ERROR_INVALID;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_FIRST_NAME_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_FIRST_NAME_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_ID_ERROR_NULL;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_LAST_NAME_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_LAST_NAME_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_PASSWORD_ERROR_LENGTH_MIN;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_PASSWORD_LENGTH_MIN;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_PATTERN_EMAIL;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_PATTERN_PASSWORD;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_PATTERN_STRING;
 
 @Getter
 @Setter
@@ -26,25 +33,27 @@ import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_NUL
 @Attributes(title = "AccountPutDtoSchema")
 public class AccountPutDto implements Comparable<AccountPutDto> {
 
-    @NotNull(message = "Id " + NOT_NULL)
+    @NotNull(message = ACCOUNT_ID_ERROR_NULL)
+    @Nullable
     @Attributes(required = true)
     private Long id;
 
-    @Size(message = "Last name not be more than " + MAX_ACCOUNT_NAME + " characters", max = MAX_ACCOUNT_NAME)
-    @Attributes(required = true, pattern = "^(.*)$", maxLength = MAX_ACCOUNT_NAME)
+    @Max(message = ACCOUNT_LAST_NAME_ERROR_LENGTH_MAX, value = ACCOUNT_LAST_NAME_LENGTH_MAX)
+    @Attributes(pattern = ACCOUNT_PATTERN_STRING, maxLength = ACCOUNT_LAST_NAME_LENGTH_MAX)
     private String lastName;
 
-    @Size(message = "First name not be more than " + MAX_ACCOUNT_NAME + " characters", max = MAX_ACCOUNT_NAME)
-    @Attributes(required = true, pattern = "^(.*)$", maxLength = MAX_ACCOUNT_NAME)
+    @Max(message = ACCOUNT_FIRST_NAME_ERROR_LENGTH_MAX, value = ACCOUNT_FIRST_NAME_LENGTH_MAX)
+    @Attributes(pattern = ACCOUNT_PATTERN_STRING, maxLength = ACCOUNT_FIRST_NAME_LENGTH_MAX)
     private String firstName;
 
-    @NotBlank(message = "Email " + NOT_EMPTY)
-    @Email(message = INVALID_EMAIL)
-    @Attributes(required = true, pattern = "^(.*)$")
+    @Email(message = ACCOUNT_EMAIL_ERROR_INVALID)
+    @Nullable
+    @Attributes(required = true, pattern = ACCOUNT_PATTERN_EMAIL)
     private String email;
 
+    @Min(message = ACCOUNT_PASSWORD_ERROR_LENGTH_MIN, value = ACCOUNT_PASSWORD_LENGTH_MIN)
     @Nullable
-    @Attributes(required = true, pattern = "^(.*)$")
+    @Attributes(required = true, pattern = ACCOUNT_PATTERN_PASSWORD)
     private String password;
 
     @Override

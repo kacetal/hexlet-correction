@@ -7,9 +7,10 @@ import io.hexlet.hexletcorrection.dto.account.AccountPutDto;
 import io.hexlet.hexletcorrection.dto.mapper.AccountMapper;
 import io.hexlet.hexletcorrection.service.AccountService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,6 +42,7 @@ public class AccountControllerStatic {
 
     private final AccountService accountService;
     private final AccountMapper accountMapper;
+    private final PasswordEncoder passwordEncoder;
 
     private final AccountPutDtoValidator accountPutDtoValidator;
 
@@ -93,30 +95,31 @@ public class AccountControllerStatic {
 
     @PutMapping()
     public String putAccount(@Valid @ModelAttribute AccountPutDto accountPutDto,
-                             Errors errors,
+                             BindingResult bindingResult,
                              Model model) {
 
 
         Optional<Account> accountOptional = accountService.findById(accountPutDto.getId());
-
         if (accountOptional.isEmpty()) {
-
-
-            model.addAttribute(WARNING, "");
-            return REDIRECT_ACCOUNT_PATH + "edit/" + accountPutDto.getId();
+            model.addAttribute(WARNING, "account does not exist");
+            return REDIRECT_ACCOUNT_PATH;
         }
 
+        final Account accountOriginal = accountOptional.get();
+        if (passwordEncoder.matches(accountPutDto.getPassword(), accountOriginal.getPassword())) {
+            bindingResult.rejectValue("password", "password not correct");
+            return EDIT_TEMPLATE;
+        }
 
-//        if (originalPassword.equals(accountPutDto.getPassword())) {
-//            //TODO Error password confirmation
-//            return REDIRECT_ACCOUNT_PATH + "edit/" + accountPutDto.getId();
-//        }
+        if (accountOriginal.getEmail().equals(accountPutDto.getEmail())) {
+            bindingResult.rejectValue("email", "email exists");
+            return EDIT_TEMPLATE;
+        }
 
-        Long updatedAccountId = accountService
-            .save(accountMapper.putDtoToAccount(accountPutDto))
-            .getId();
+        final Account accountToSave = accountMapper.putDtoToAccount(accountPutDto);
+        final Account accountSaved = accountService.save(accountToSave);
 
-        return REDIRECT_ACCOUNT_PATH + updatedAccountId;
+        return REDIRECT_ACCOUNT_PATH + accountSaved.getId();
     }
 
     @DeleteMapping("/{id}")

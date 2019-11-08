@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CorrectionRepository extends JpaRepository<Correction, Long> {
 
-    List<Correction> findByReporter(String reporter);
+    List<Correction> findByReporterName(String reporterName);
 
     List<Correction> findByCorrecter(Account correcter);
 

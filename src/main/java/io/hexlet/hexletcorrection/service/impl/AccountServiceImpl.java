@@ -93,11 +93,11 @@ public class AccountServiceImpl implements AccountService {
             return accountRepository.save(entity);
         }
 
-        Account accountToPut = accountRepository.findById(entity.getId()).orElseThrow();
-        accountToPut.setLastName(entity.getLastName());
-        accountToPut.setFirstName(entity.getFirstName());
-        accountToPut.setEmail(entity.getEmail());
-        return accountRepository.save(accountToPut);
+        Account accountToUpdate = accountRepository.findById(entity.getId()).orElseThrow();
+        accountToUpdate.setLastName(entity.getLastName());
+        accountToUpdate.setFirstName(entity.getFirstName());
+        accountToUpdate.setEmail(entity.getEmail());
+        return accountRepository.save(accountToUpdate);
     }
 
     @Override

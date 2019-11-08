@@ -9,13 +9,34 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.MAX_COMMENT_LENGTH;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_EMPTY;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_NULL;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_COR_COMMENT_ERROR_BLANK;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_COR_COMMENT_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_COR_COMMENT_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_ID_ERROR_NULL;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REPORTER_ERROR_BLANK;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REPORTER_ERROR_LENGTH_SIZE;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REPORTER_NAME_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REPORTER_NAME_LENGTH_MIN;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REP_COMMENT_ERROR_BLANK;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REP_COMMENT_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REP_COMMENT_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_RES_COMMENT_ERROR_BLANK;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_RES_COMMENT_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_RES_COMMENT_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_AFTER_CORRECTION_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_AFTER_CORRECTION_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_BEFORE_CORRECTION_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_BEFORE_CORRECTION_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_CORRECTION_ERROR_LENGTH_SIZE;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_CORRECTION_ERROR_NULL;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_CORRECTION_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_CORRECTION_LENGTH_MIN;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_URL_ERROR_BLANK;
 
 @Getter
 @Setter
@@ -25,29 +46,38 @@ import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_NUL
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CorrectionViewDto implements Comparable<CorrectionViewDto> {
 
-    @NotNull(message = "Id " + NOT_NULL)
+    @NotNull(message = CORRECTION_ID_ERROR_NULL)
     private Long id;
 
-    @Size(message = "Reporter's comment not be more than " + MAX_COMMENT_LENGTH + " characters", max = MAX_COMMENT_LENGTH)
+    @Max(message = CORRECTION_REP_COMMENT_ERROR_LENGTH_MAX, value = CORRECTION_REP_COMMENT_LENGTH_MAX)
+    @NotBlank(message = CORRECTION_REP_COMMENT_ERROR_BLANK)
     private String reporterComment;
 
-    @Size(message = "Correcter's comment not be more than " + MAX_COMMENT_LENGTH + " characters", max = MAX_COMMENT_LENGTH)
+    @Max(message = CORRECTION_COR_COMMENT_ERROR_LENGTH_MAX, value = CORRECTION_COR_COMMENT_LENGTH_MAX)
+    @NotBlank(message = CORRECTION_COR_COMMENT_ERROR_BLANK)
     private String correcterComment;
 
-    @Size(message = "Resolver's comment not be more than " + MAX_COMMENT_LENGTH + " characters", max = MAX_COMMENT_LENGTH)
+    @Max(message = CORRECTION_RES_COMMENT_ERROR_LENGTH_MAX, value = CORRECTION_RES_COMMENT_LENGTH_MAX)
+    @NotBlank(message = CORRECTION_RES_COMMENT_ERROR_BLANK)
     private String resolverComment;
 
-    @NotNull(message = "text before highlight text" + NOT_NULL)
-    private String beforeHighlightText;
+    @Max(message = CORRECTION_TEXT_BEFORE_CORRECTION_ERROR_LENGTH_MAX, value = CORRECTION_TEXT_BEFORE_CORRECTION_LENGTH_MAX)
+    private String textBeforeCorrection;
 
-    @NotNull(message = "Highlight text " + NOT_NULL)
-    private String highlightText;
+    @Size(message = CORRECTION_TEXT_CORRECTION_ERROR_LENGTH_SIZE,
+        min = CORRECTION_TEXT_CORRECTION_LENGTH_MIN,
+        max = CORRECTION_TEXT_CORRECTION_LENGTH_MAX)
+    @NotNull(message = CORRECTION_TEXT_CORRECTION_ERROR_NULL)
+    private String textCorrection;
 
-    @NotNull(message = "text after highlight text " + NOT_NULL)
-    private String afterHighlightText;
+    @Max(message = CORRECTION_TEXT_AFTER_CORRECTION_ERROR_LENGTH_MAX, value = CORRECTION_TEXT_AFTER_CORRECTION_LENGTH_MAX)
+    private String textAfterCorrection;
 
-    @NotBlank(message = "Reporter " + NOT_EMPTY)
-    private String reporter;
+    @Size(message = CORRECTION_REPORTER_ERROR_LENGTH_SIZE,
+        min = CORRECTION_REPORTER_NAME_LENGTH_MIN,
+        max = CORRECTION_REPORTER_NAME_LENGTH_MAX)
+    @NotBlank(message = CORRECTION_REPORTER_ERROR_BLANK)
+    private String reporterName;
 
     @JsonIgnoreProperties({"correctionsResolved", "correctionsInProgress"})
     private AccountGetDto correcter;
@@ -55,7 +85,7 @@ public class CorrectionViewDto implements Comparable<CorrectionViewDto> {
     @JsonIgnoreProperties({"correctionsResolved", "correctionsInProgress"})
     private AccountGetDto resolver;
 
-    @NotBlank(message = "URL " + NOT_EMPTY)
+    @NotBlank(message = CORRECTION_URL_ERROR_BLANK)
     private String pageURL;
 
     @Override

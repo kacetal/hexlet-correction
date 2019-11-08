@@ -3,7 +3,7 @@ package io.hexlet.hexletcorrection.controller.validator;
 import io.hexlet.hexletcorrection.dto.account.AccountPutDto;
 import io.hexlet.hexletcorrection.service.AccountService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
 @AllArgsConstructor
 public class AccountPutDtoValidator implements Validator {
 
-    BCryptPasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
     AccountService accountService;
 
     @Override

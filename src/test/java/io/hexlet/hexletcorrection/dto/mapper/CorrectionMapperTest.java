@@ -27,13 +27,13 @@ public class CorrectionMapperTest extends AbstractMapperTest {
         final CorrectionGetDto actualCorrectionGetDto = correctionMapper.toCorrectionGetDto(getCorrection());
 
         assertEquals(expectedCorrectionGetDto.getId(), actualCorrectionGetDto.getId());
-        assertEquals(expectedCorrectionGetDto.getBeforeHighlightText(), actualCorrectionGetDto.getBeforeHighlightText());
-        assertEquals(expectedCorrectionGetDto.getHighlightText(), actualCorrectionGetDto.getHighlightText());
-        assertEquals(expectedCorrectionGetDto.getAfterHighlightText(), actualCorrectionGetDto.getAfterHighlightText());
-        assertEquals(expectedCorrectionGetDto.getReporter(), actualCorrectionGetDto.getReporter());
+        assertEquals(expectedCorrectionGetDto.getTextBeforeCorrection(), actualCorrectionGetDto.getTextBeforeCorrection());
+        assertEquals(expectedCorrectionGetDto.getTextCorrection(), actualCorrectionGetDto.getTextCorrection());
+        assertEquals(expectedCorrectionGetDto.getTextAfterCorrection(), actualCorrectionGetDto.getTextAfterCorrection());
+        assertEquals(expectedCorrectionGetDto.getReporterName(), actualCorrectionGetDto.getReporterName());
         assertEquals(expectedCorrectionGetDto.getResolver().getId(), actualCorrectionGetDto.getResolver().getId());
         assertEquals(expectedCorrectionGetDto.getPageURL(), actualCorrectionGetDto.getPageURL());
-        assertEquals(expectedCorrectionGetDto.getHighlightText(), actualCorrectionGetDto.getHighlightText());
+        assertEquals(expectedCorrectionGetDto.getTextCorrection(), actualCorrectionGetDto.getTextCorrection());
     }
 
     @Test
@@ -50,10 +50,10 @@ public class CorrectionMapperTest extends AbstractMapperTest {
         assertEquals(expectedCorrectionViewDto.getReporterComment(), actualCorrectionViewDto.getReporterComment());
         assertEquals(expectedCorrectionViewDto.getCorrecterComment(), actualCorrectionViewDto.getCorrecterComment());
         assertEquals(expectedCorrectionViewDto.getResolverComment(), actualCorrectionViewDto.getResolverComment());
-        assertEquals(expectedCorrectionViewDto.getBeforeHighlightText(), actualCorrectionViewDto.getBeforeHighlightText());
-        assertEquals(expectedCorrectionViewDto.getHighlightText(), actualCorrectionViewDto.getHighlightText());
-        assertEquals(expectedCorrectionViewDto.getAfterHighlightText(), actualCorrectionViewDto.getAfterHighlightText());
-        assertEquals(expectedCorrectionViewDto.getReporter(), actualCorrectionViewDto.getReporter());
+        assertEquals(expectedCorrectionViewDto.getTextBeforeCorrection(), actualCorrectionViewDto.getTextBeforeCorrection());
+        assertEquals(expectedCorrectionViewDto.getTextCorrection(), actualCorrectionViewDto.getTextCorrection());
+        assertEquals(expectedCorrectionViewDto.getTextAfterCorrection(), actualCorrectionViewDto.getTextAfterCorrection());
+        assertEquals(expectedCorrectionViewDto.getReporterName(), actualCorrectionViewDto.getReporterName());
         assertEquals(expectedCorrectionViewDto.getCorrecter().getId(), actualCorrectionViewDto.getCorrecter().getId());
         assertEquals(expectedCorrectionViewDto.getResolver().getId(), actualCorrectionViewDto.getResolver().getId());
         assertEquals(expectedCorrectionViewDto.getPageURL(), actualCorrectionViewDto.getPageURL());
@@ -73,7 +73,6 @@ public class CorrectionMapperTest extends AbstractMapperTest {
         assertEquals(expectedCorrectionPutDto.getReporterComment(), actualCorrectionPutDto.getReporterComment());
         assertEquals(expectedCorrectionPutDto.getCorrecterComment(), actualCorrectionPutDto.getCorrecterComment());
         assertEquals(expectedCorrectionPutDto.getResolverComment(), actualCorrectionPutDto.getResolverComment());
-        assertEquals(expectedCorrectionPutDto.getCorrecter().getId(), actualCorrectionPutDto.getCorrecter().getId());
         assertEquals(expectedCorrectionPutDto.getPageURL(), actualCorrectionPutDto.getPageURL());
     }
 
@@ -93,10 +92,10 @@ public class CorrectionMapperTest extends AbstractMapperTest {
         assertEquals(expectedCorrection.getResolverComment(), actualCorrection.getResolverComment());
         assertEquals(expectedCorrection.getCorrecter().getId(), actualCorrection.getCorrecter().getId());
         assertEquals(expectedCorrection.getPageURL(), actualCorrection.getPageURL());
-        assertNull(actualCorrection.getBeforeHighlightText());
-        assertNull(actualCorrection.getHighlightText());
-        assertNull(actualCorrection.getAfterHighlightText());
-        assertNull(actualCorrection.getReporter());
+        assertNull(actualCorrection.getTextBeforeCorrection());
+        assertNull(actualCorrection.getTextCorrection());
+        assertNull(actualCorrection.getTextAfterCorrection());
+        assertNull(actualCorrection.getReporterName());
         assertNull(actualCorrection.getResolver());
     }
 
@@ -110,10 +109,10 @@ public class CorrectionMapperTest extends AbstractMapperTest {
         final Correction expectedCorrection = getCorrection();
         final Correction actualCorrection = correctionMapper.postDtoToCorrection(getCorrectionPostDto());
 
-        assertEquals(expectedCorrection.getBeforeHighlightText(), actualCorrection.getBeforeHighlightText());
-        assertEquals(expectedCorrection.getHighlightText(), actualCorrection.getHighlightText());
-        assertEquals(expectedCorrection.getAfterHighlightText(), actualCorrection.getAfterHighlightText());
-        assertEquals(expectedCorrection.getReporter(), actualCorrection.getReporter());
+        assertEquals(expectedCorrection.getTextBeforeCorrection(), actualCorrection.getTextBeforeCorrection());
+        assertEquals(expectedCorrection.getTextCorrection(), actualCorrection.getTextCorrection());
+        assertEquals(expectedCorrection.getTextAfterCorrection(), actualCorrection.getTextAfterCorrection());
+        assertEquals(expectedCorrection.getReporterName(), actualCorrection.getReporterName());
         assertEquals(expectedCorrection.getReporterComment(), actualCorrection.getReporterComment());
         assertEquals(expectedCorrection.getPageURL(), actualCorrection.getPageURL());
         assertNull(actualCorrection.getId());

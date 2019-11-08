@@ -1,0 +1,213 @@
+databaseChangeLog:
+- changeSet:
+    id: 1573218970868-1
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: correcter_comment
+            type: varchar(255)
+        tableName: correction
+- changeSet:
+    id: 1573218970868-2
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: correcter_id
+            type: bigint
+        tableName: correction
+- changeSet:
+    id: 1573218970868-3
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: first_name
+            type: varchar(50)
+        tableName: account
+- changeSet:
+    id: 1573218970868-4
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: last_name
+            type: varchar(50)
+        tableName: account
+- changeSet:
+    id: 1573218970868-5
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: reporter_comment
+            type: varchar(200)
+        tableName: correction
+- changeSet:
+    id: 1573218970868-6
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: reporter_name
+            type: varchar(50)
+        tableName: correction
+- changeSet:
+    id: 1573218970868-7
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: resolver_comment
+            type: varchar(255)
+        tableName: correction
+- changeSet:
+    id: 1573218970868-8
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: resolver_id
+            type: bigint
+        tableName: correction
+- changeSet:
+    id: 1573218970868-9
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: text_after_correction
+            type: varchar(1000)
+        tableName: correction
+- changeSet:
+    id: 1573218970868-10
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: text_before_correction
+            type: varchar(1000)
+        tableName: correction
+- changeSet:
+    id: 1573218970868-11
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: text_correction
+            type: varchar(200)
+        tableName: correction
+- changeSet:
+    id: 1573218970868-12
+    author: artem (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: username
+            type: varchar(50)
+        tableName: account
+- changeSet:
+    id: 1573218970868-13
+    author: artem (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: username
+        constraintName: UC_ACCOUNTUSERNAME_COL
+        tableName: account
+- changeSet:
+    id: 1573218970868-14
+    author: artem (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: resolver_id
+        baseTableName: correction
+        constraintName: FK4ik5npyr1hsrilhrrydhxmupu
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: account
+- changeSet:
+    id: 1573218970868-15
+    author: artem (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: correcter_id
+        baseTableName: correction
+        constraintName: FKdrcq18tu0ucd3orc4fx8eg6et
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: account
+- changeSet:
+    id: 1573218970868-16
+    author: artem (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: CORRECTION
+        constraintName: FK7QJXJ0DSKD1MQKOSUEN5MPKXJ
+- changeSet:
+    id: 1573218970868-17
+    author: artem (generated)
+    changes:
+    - dropColumn:
+        columnName: ACCOUNT_ID
+        tableName: CORRECTION
+- changeSet:
+    id: 1573218970868-18
+    author: artem (generated)
+    changes:
+    - dropColumn:
+        columnName: AFTER_HIGHLIGHT
+        tableName: CORRECTION
+- changeSet:
+    id: 1573218970868-19
+    author: artem (generated)
+    changes:
+    - dropColumn:
+        columnName: BEFORE_HIGHLIGHT
+        tableName: CORRECTION
+- changeSet:
+    id: 1573218970868-20
+    author: artem (generated)
+    changes:
+    - dropColumn:
+        columnName: COMMENT
+        tableName: CORRECTION
+- changeSet:
+    id: 1573218970868-21
+    author: artem (generated)
+    changes:
+    - dropColumn:
+        columnName: HIGHLIGHT_TEXT
+        tableName: CORRECTION
+- changeSet:
+    id: 1573218970868-22
+    author: artem (generated)
+    changes:
+    - dropColumn:
+        columnName: NAME
+        tableName: ACCOUNT
+

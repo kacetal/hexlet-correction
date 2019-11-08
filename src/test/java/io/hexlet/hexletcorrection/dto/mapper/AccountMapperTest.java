@@ -114,10 +114,10 @@ public class AccountMapperTest extends AbstractMapperTest {
         final CorrectionGetDto expectedCorrectionGetDto = getCorrectionGetDto();
         final CorrectionGetDto actualCorrectionGetDto = accountMapper.correctionToCorrectionGetDto(getCorrection());
         assertEquals(expectedCorrectionGetDto.getId(), actualCorrectionGetDto.getId());
-        assertEquals(expectedCorrectionGetDto.getBeforeHighlightText(), actualCorrectionGetDto.getBeforeHighlightText());
-        assertEquals(expectedCorrectionGetDto.getHighlightText(), actualCorrectionGetDto.getHighlightText());
-        assertEquals(expectedCorrectionGetDto.getAfterHighlightText(), actualCorrectionGetDto.getAfterHighlightText());
-        assertEquals(expectedCorrectionGetDto.getReporter(), actualCorrectionGetDto.getReporter());
+        assertEquals(expectedCorrectionGetDto.getTextBeforeCorrection(), actualCorrectionGetDto.getTextBeforeCorrection());
+        assertEquals(expectedCorrectionGetDto.getTextCorrection(), actualCorrectionGetDto.getTextCorrection());
+        assertEquals(expectedCorrectionGetDto.getTextAfterCorrection(), actualCorrectionGetDto.getTextAfterCorrection());
+        assertEquals(expectedCorrectionGetDto.getReporterName(), actualCorrectionGetDto.getReporterName());
         assertEquals(expectedCorrectionGetDto.getPageURL(), actualCorrectionGetDto.getPageURL());
         assertNull(actualCorrectionGetDto.getCorrecter());
         assertNull(actualCorrectionGetDto.getResolver());

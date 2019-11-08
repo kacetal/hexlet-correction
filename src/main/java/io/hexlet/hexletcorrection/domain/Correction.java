@@ -15,13 +15,33 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.MAX_COMMENT_LENGTH;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_EMPTY;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_NULL;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_COR_COMMENT_ERROR_BLANK;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_COR_COMMENT_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_COR_COMMENT_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REPORTER_ERROR_BLANK;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REPORTER_ERROR_LENGTH_SIZE;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REPORTER_NAME_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REPORTER_NAME_LENGTH_MIN;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REP_COMMENT_ERROR_BLANK;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REP_COMMENT_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_REP_COMMENT_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_RES_COMMENT_ERROR_BLANK;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_RES_COMMENT_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_RES_COMMENT_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_AFTER_CORRECTION_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_AFTER_CORRECTION_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_BEFORE_CORRECTION_ERROR_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_BEFORE_CORRECTION_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_CORRECTION_ERROR_LENGTH_SIZE;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_CORRECTION_ERROR_NULL;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_CORRECTION_LENGTH_MAX;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_TEXT_CORRECTION_LENGTH_MIN;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_URL_ERROR_BLANK;
 
 @Getter
 @Setter
@@ -36,33 +56,42 @@ public class Correction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "reporter_comment")
-    @Size(message = "Reporter's comment not be more than " + MAX_COMMENT_LENGTH + " characters", max = MAX_COMMENT_LENGTH)
+    @Column(name = "reporter_comment", length = CORRECTION_REP_COMMENT_LENGTH_MAX)
+    @Max(message = CORRECTION_REP_COMMENT_ERROR_LENGTH_MAX, value = CORRECTION_REP_COMMENT_LENGTH_MAX)
+    @NotBlank(message = CORRECTION_REP_COMMENT_ERROR_BLANK)
     private String reporterComment;
 
     @Column(name = "correcter_comment")
-    @Size(message = "Correcter's comment not be more than " + MAX_COMMENT_LENGTH + " characters", max = MAX_COMMENT_LENGTH)
+    @Max(message = CORRECTION_COR_COMMENT_ERROR_LENGTH_MAX, value = CORRECTION_COR_COMMENT_LENGTH_MAX)
+    @NotBlank(message = CORRECTION_COR_COMMENT_ERROR_BLANK)
     private String correcterComment;
 
     @Column(name = "resolver_comment")
-    @Size(message = "Resolver's comment not be more than " + MAX_COMMENT_LENGTH + " characters", max = MAX_COMMENT_LENGTH)
+    @Max(message = CORRECTION_RES_COMMENT_ERROR_LENGTH_MAX, value = CORRECTION_RES_COMMENT_LENGTH_MAX)
+    @NotBlank(message = CORRECTION_RES_COMMENT_ERROR_BLANK)
     private String resolverComment;
 
-    @Column(name = "before_highlight_text", updatable = false, nullable = false)
-    @NotNull(message = "text before highlight text" + NOT_NULL)
-    private String beforeHighlightText;
+    @Column(name = "text_before_correction", updatable = false, nullable = false, length = CORRECTION_TEXT_BEFORE_CORRECTION_LENGTH_MAX)
+    @Max(message = CORRECTION_TEXT_BEFORE_CORRECTION_ERROR_LENGTH_MAX, value = CORRECTION_TEXT_BEFORE_CORRECTION_LENGTH_MAX)
+    private String textBeforeCorrection;
 
-    @Column(name = "highlight_text", updatable = false, nullable = false)
-    @NotNull(message = "Highlight text " + NOT_NULL)
-    private String highlightText;
+    @Column(name = "text_correction", updatable = false, nullable = false, length = CORRECTION_TEXT_CORRECTION_LENGTH_MAX)
+    @Size(message = CORRECTION_TEXT_CORRECTION_ERROR_LENGTH_SIZE,
+        min = CORRECTION_TEXT_CORRECTION_LENGTH_MIN,
+        max = CORRECTION_TEXT_CORRECTION_LENGTH_MAX)
+    @NotNull(message = CORRECTION_TEXT_CORRECTION_ERROR_NULL)
+    private String textCorrection;
 
-    @Column(name = "after_highlight_text", updatable = false, nullable = false)
-    @NotNull(message = "text after highlight text " + NOT_NULL)
-    private String afterHighlightText;
+    @Column(name = "text_after_correction", updatable = false, nullable = false, length = CORRECTION_TEXT_AFTER_CORRECTION_LENGTH_MAX)
+    @Max(message = CORRECTION_TEXT_AFTER_CORRECTION_ERROR_LENGTH_MAX, value = CORRECTION_TEXT_AFTER_CORRECTION_LENGTH_MAX)
+    private String textAfterCorrection;
 
-    @NotBlank(message = "Reporter " + NOT_EMPTY)
-    @Column(updatable = false, nullable = false)
-    private String reporter;
+    @Column(name = "reporter_name", updatable = false, nullable = false, length = CORRECTION_REPORTER_NAME_LENGTH_MAX)
+    @Size(message = CORRECTION_REPORTER_ERROR_LENGTH_SIZE,
+        min = CORRECTION_REPORTER_NAME_LENGTH_MIN,
+        max = CORRECTION_REPORTER_NAME_LENGTH_MAX)
+    @NotBlank(message = CORRECTION_REPORTER_ERROR_BLANK)
+    private String reporterName;
 
     @ManyToOne
     @JsonIgnoreProperties({"correctionsResolved", "correctionsInProgress"})
@@ -73,7 +102,7 @@ public class Correction {
     @JoinColumn(updatable = false)
     private Account resolver;
 
-    @NotBlank(message = "URL " + NOT_EMPTY)
+    @NotBlank(message = CORRECTION_URL_ERROR_BLANK)
     @Column(name = "page_url", nullable = false)
     private String pageURL;
 }

@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static io.hexlet.hexletcorrection.controller.ControllerConstants.ACCOUNTS_PATH;
 import static io.hexlet.hexletcorrection.controller.ControllerConstants.API_PATH_V1;
 import static io.hexlet.hexletcorrection.controller.ControllerConstants.TEST_HOST;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.INVALID_EMAIL;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.MAX_ACCOUNT_NAME;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_EMAIL_ERROR_INVALID;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.ACCOUNT_USERNAME_LENGTH_MAX;
 import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_EMPTY;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -144,7 +144,7 @@ public class AccountControllerTest extends AbstractControllerTest {
         Account account = Account.builder()
                 .email("artem@hexlet.io")
                 .password(PASSWORD)
-                .username("A".repeat(MAX_ACCOUNT_NAME + 1)).build();
+                .username("A".repeat(ACCOUNT_USERNAME_LENGTH_MAX + 1)).build();
 
         given().when()
                 .body(account)
@@ -152,7 +152,7 @@ public class AccountControllerTest extends AbstractControllerTest {
                 .post(TEST_HOST + ":" + port + API_PATH_V1 + ACCOUNTS_PATH)
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .body("name", equalTo("Name not be more than " + MAX_ACCOUNT_NAME + " characters"));
+                .body("name", equalTo("Name not be more than " + ACCOUNT_USERNAME_LENGTH_MAX + " characters"));
     }
 
     @Test
@@ -185,7 +185,7 @@ public class AccountControllerTest extends AbstractControllerTest {
                 .post(TEST_HOST + ":" + port + API_PATH_V1 + ACCOUNTS_PATH)
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .body("email", equalTo(INVALID_EMAIL));
+                .body("email", equalTo(ACCOUNT_EMAIL_ERROR_INVALID));
     }
 
     @Test

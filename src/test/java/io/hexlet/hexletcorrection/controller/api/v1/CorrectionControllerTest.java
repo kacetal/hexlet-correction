@@ -17,7 +17,7 @@ import java.util.List;
 import static io.hexlet.hexletcorrection.controller.ControllerConstants.API_PATH_V1;
 import static io.hexlet.hexletcorrection.controller.ControllerConstants.CORRECTIONS_PATH;
 import static io.hexlet.hexletcorrection.controller.ControllerConstants.TEST_HOST;
-import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.MAX_COMMENT_LENGTH;
+import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.CORRECTION_COR_COMMENT_ERROR_LENGTH_MAX;
 import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_EMPTY;
 import static io.hexlet.hexletcorrection.domain.EntityConstrainConstants.NOT_NULL;
 import static io.restassured.RestAssured.given;
@@ -124,7 +124,7 @@ public class CorrectionControllerTest extends AbstractControllerTest {
                 .post(TEST_HOST + ":" + port + API_PATH_V1 + CORRECTIONS_PATH)
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .body("comment", equalTo("Comment not be more than " + MAX_COMMENT_LENGTH + " characters"));
+                .body("comment", equalTo("Comment not be more than " + CORRECTION_COR_COMMENT_ERROR_LENGTH_MAX + " characters"));
     }
 
     @Test

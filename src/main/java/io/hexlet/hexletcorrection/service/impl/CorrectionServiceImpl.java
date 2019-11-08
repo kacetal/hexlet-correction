@@ -28,7 +28,7 @@ public class CorrectionServiceImpl implements CorrectionService {
         if (isNullOrEmpty(reporter)) {
             return emptyList();
         }
-        return correctionRepository.findByReporter(reporter);
+        return correctionRepository.findByReporterName(reporter);
     }
 
     @Override

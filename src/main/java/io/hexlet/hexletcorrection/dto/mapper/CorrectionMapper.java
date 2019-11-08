@@ -27,7 +27,6 @@ public interface CorrectionMapper {
     })
     CorrectionViewDto toCorrectionViewDto(Correction correction);
 
-    @Mapping(target = "correcter", qualifiedByName = "accountToAccountGetDto")
     CorrectionPutDto toCorrectionPutDto(Correction correction);
 
     Correction putDtoToCorrection(CorrectionPutDto correctionPutDto);

@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -136,34 +136,17 @@ public class CorrectionControllerStatic {
     }
 
     @PutMapping()
-    public String putAccount(
-        @Valid @ModelAttribute CorrectionPutDto correctionPutDto,
-        Errors errors,
-        Model model
-    ) {
-
-
-
-        Optional<Account> accountOptional = accountService.findById(correctionPutDto.getId());
-
-        if (accountOptional.isEmpty()) {
-
-
-            model.addAttribute(WARNING, "");
-            return REDIRECT_CORRECTIONS_PATH + "edit/" + correctionPutDto.getId();
+    public String putCorrection(@Valid @ModelAttribute CorrectionPutDto correctionPutDto, BindingResult bindingResult, Model model) {
+        Optional<Correction> correctionOptional = correctionService.findById(correctionPutDto.getId());
+        if (correctionOptional.isEmpty()) {
+            model.addAttribute(WARNING, "correction does not exist");
+            return REDIRECT_CORRECTIONS_PATH;
         }
 
+        final Correction correctionToSave = correctionMapper.putDtoToCorrection(correctionPutDto);
+        final Correction correctionSaved = correctionService.save(correctionToSave);
 
-//        if (originalPassword.equals(correctionPutDto.getPassword())) {
-//            //TODO Error password confirmation
-//            return REDIRECT_CORRECTIONS_PATH + "edit/" + correctionPutDto.getId();
-//        }
-
-        Long updatedAccountId = correctionService
-            .save(correctionMapper.putDtoToCorrection(correctionPutDto))
-            .getId();
-
-        return REDIRECT_CORRECTIONS_PATH + updatedAccountId;
+        return REDIRECT_CORRECTIONS_PATH + correctionSaved.getId();
     }
 
     @DeleteMapping("/{id}")
