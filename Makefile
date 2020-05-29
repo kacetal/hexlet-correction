@@ -1,27 +1,15 @@
-.DEFAULT_GOAL := build-run
+.DEFAULT_GOAL := package-run
+
+package-run: package run
 
 run: docker-db
-	java -jar ./target/hexlet-correction-*.jar
+	java --enable-preview -jar ./target/hexlet-correction*.jar
 
-build-run: build run
+package:
+	./mvnw clean package -T 1C
 
-validate:
-	./mvnw -ntp -fae validate
-
-unit-test:
-	./mvnw -ntp -fae clean test
-
-build:
-	./mvnw -ntp -fae clean verify
-
-build-docker:
-	./mvnw -ntp -fae clean verify jib:dockerBuild
+unit-tests:
+	./mvnw clean test
 
 docker-db:
 	docker-compose -f ./src/main/docker/postgresql.yml up -d
-
-update:
-	./mvnw versions:update-properties versions:display-plugin-updates
-
-generate-migration:
-	./mvnw clean compile liquibase:update liquibase:diff -DskipTests=true && rm /tmp/liquibase_migration*
