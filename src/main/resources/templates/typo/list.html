@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/simple-head :: simple-head}">
+<body>
+<div class="container" th:object="${typos}">
+    <nav th:replace="~{fragments/navbar}"></nav>
+    <h2>All Typos</h2>
+    <div class="row justify-content-md-center" th:if="*{isEmpty()}">
+        <a class="btn btn-outline-info col col-lg-2" th:href="@{'/typos/create'}">Create new Typo</a>
+    </div>
+    <div th:unless="*{isEmpty()}">
+        <h4 th:text="'Number of Typos : ' + *{size()}"></h4>
+        <th:block th:each="typo : ${typos}" th:object="${typo}">
+            <div class="card m-4">
+                <div class="card-header">
+                    <div class="row justify-content-start align-items-center">
+                        <div class="col-2" th:text="*{typoStatus}">Typo Status</div>
+                        <a class="col-auto mr-1" th:href="*{pageUrl}">Page Url</a>
+                        <a class="btn btn-info col-auto mr-1" th:href="@{'/typos/{id}/'(id=*{id})}">Info</a>
+                        <div th:if="*{typoStatus == typoStatus.CANCELED}">
+                            <a class="btn btn-primary col-auto disabled">Affect</a>
+                        </div>
+                        <div class="col-auto" th:if="*{typoStatus != typoStatus.CANCELED}">
+                            <a class="btn btn-primary" th:href="@{'/typos/{id}/affect'(id=*{id})}">Affect</a>
+                            <a class="btn btn-success" th:href="@{'/typos/{id}/resolve'(id=*{id})}"
+                               th:if="*{typoStatus == typoStatus.IN_PROGRESS}">Resolve</a>
+                        </div>
+                        <!--                        <div class="col-auto mr-auto" th:if="*{account}" th:text="*{'Correcteur ' + account.getUsername()}">-->
+                    </div>
+                    <div class="col-auto mr-auto" th:text="*{'Reported by ' + reporterName}"></div>
+                    <div class="text-muted col-1" th:text="*{'ID: ' + id}"></div>
+                    <a class="btn btn-secondary col-auto" th:href="@{'/typos/{id}/cancel'(id=*{id})}"
+                       th:if="*{typoStatus != typoStatus.CANCELED}">Cancel</a>
+                    <a class="btn btn-secondary col-auto" th:href="@{'/typos/{id}/open'(id=*{id})}"
+                       th:if="*{typoStatus == typoStatus.CANCELED}">Open</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    <span th:text="*{textBeforeTypo}"></span>
+                    <span class="text-danger" th:text="*{textTypo}"></span>
+                    <span th:text="*{textAfterTypo}"></span>
+                </p>
+                <p class="card-text font-italic" th:text="*{reporterRemark}"></p>
+            </div>
+    </div>
+    </th:block>
+</div>
+</div>
+<link th:replace="~{fragments/bootstrap-scripts}">
+</body>
+</html>

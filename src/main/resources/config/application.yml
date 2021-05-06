@@ -16,16 +16,23 @@ spring:
   application:
     name: hexletCorrection
   jpa:
+    properties:
+      hibernate:
+        id:
+          optimizer:
+            pooled:
+              preferred: pooled-lo
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+      ddl-auto: update
   datasource:
     initialization-mode: always
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/hexletCorrection
-    username: localUser
-    password: pass
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/hexletCorrection}
+    username: ${JDBC_DATABASE_USERNAME:localUser}
+    password: ${JDBC_DATABASE_PASSWORD:pass}
+logging:
+  level:
+    root: debug
+    web: debug
+    sql: debug
